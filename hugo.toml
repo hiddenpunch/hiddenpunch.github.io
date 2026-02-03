@@ -1,4 +1,5 @@
 baseURL = "https://hiddenpunch.github.io/"
+googleAnalytics = "G-L25R6R8HN1"
 languageCode = "ko-kr"
 title = "Hiddenpunch's Tech Blog"
 theme = "PaperMod"
