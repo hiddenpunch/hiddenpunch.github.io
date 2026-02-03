@@ -2,7 +2,8 @@ backend:
   name: github
   repo: hiddenpunch/hiddenpunch.github.io
   branch: main
-  base_url: https://sveltia-cms-auth.hankchizljaw.com
+  auth_type: pkce
+  app_id: Ov23liv79or4kCD2khpG
 
 publish_mode: editorial_workflow
 media_folder: static/images
