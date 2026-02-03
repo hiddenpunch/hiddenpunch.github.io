@@ -5,7 +5,7 @@ summary: ".git 폴더를 열어보며 Git의 Object Model을 이해합니다"
 tags: ["git", "해체분석기"]
 categories: ["개발"]
 series: ["해체분석기"]
-draft: true
+draft: false
 ---
 
 > 매일 쓰는 Git, 하지만 `.git` 폴더 안을 들여다본 적 있나요?
