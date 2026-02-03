@@ -46,22 +46,22 @@ Git은 복잡해 보이지만, 내부적으로는 단 **세 가지 객체**만 �
 
 아래 그림은 이 세 객체가 어떻게 연결되는지 보여줍니다:
 
-<div class="mermaid">
+```mermaid
 flowchart LR
-    C[🔷 Commit<br/>스냅샷 메타데이터]
-    T[🟢 Tree<br/>디렉토리 구조]
-    B1[🟡 Blob<br/>파일 내용]
-    B2[🟡 Blob<br/>파일 내용]
+    C[COMMIT]
+    T[TREE]
+    B1[BLOB]
+    B2[BLOB]
     
-    C -->|"이 시점의<br/>파일 구조"| T
-    T -->|"README.md"| B1
-    T -->|"main.py"| B2
+    C -->|tree| T
+    T -->|README.md| B1
+    T -->|main.py| B2
     
-    style C fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style T fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style B1 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B2 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-</div>
+    style C fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style T fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+```
 
 | 색상 | 객체 | 역할 |
 |------|------|------|
@@ -83,26 +83,18 @@ $ echo "Hello, Git!" | git hash-object -w --stdin
 
 이 과정을 그림으로 보면:
 
-<div class="mermaid">
+```mermaid
 flowchart LR
-    subgraph input[입력]
-        A[파일 내용<br/>Hello Git!]
-    end
-    
-    subgraph process[처리]
-        B[SHA-1 해시 계산]
-    end
-    
-    subgraph output[저장]
-        C[.git/objects/55/7db03...]
-    end
+    A[File Content]
+    B[SHA-1 Hash]
+    C[.git/objects/55/7db03...]
     
     A --> B --> C
     
-    style A fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style A fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px
     style C fill:#e0e0e0,stroke:#616161,stroke-width:2px
-</div>
+```
 
 **왜 이렇게 설계했을까?**
 - 🔸 **파일명은 저장 안 함** → 같은 내용이면 파일명이 달라도 하나만 저장 (용량 절약!)
@@ -115,39 +107,30 @@ flowchart LR
 
 **Tree**는 "이 폴더에 어떤 파일/폴더가 있는지"를 기록합니다.
 
-<div class="mermaid">
+```mermaid
 flowchart TB
-    subgraph root[루트 Tree]
-        T1[🟢 tree a1b2c3<br/>프로젝트 루트]
-    end
+    T1[TREE - root]
+    B1[BLOB - README]
+    B2[BLOB - main.py]
+    T2[TREE - src]
+    B3[BLOB - app.py]
     
-    subgraph files[파일들]
-        B1[🟡 blob<br/>README.md 내용]
-        B2[🟡 blob<br/>main.py 내용]
-    end
+    T1 -->|README.md| B1
+    T1 -->|main.py| B2
+    T1 -->|src| T2
+    T2 -->|app.py| B3
     
-    subgraph subdir[하위 디렉토리]
-        T2[🟢 tree<br/>src 폴더]
-        B3[🟡 blob<br/>app.py 내용]
-    end
-    
-    T1 -->|"100644 README.md"| B1
-    T1 -->|"100644 main.py"| B2
-    T1 -->|"040000 src/"| T2
-    T2 -->|"100644 app.py"| B3
-    
-    style T1 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style T2 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style B1 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B2 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B3 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-</div>
+    style T1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style T2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+```
 
 **그림 설명:**
-- 🟢 **초록 박스(Tree)**: 디렉토리를 나타냄
-- 🟡 **노란 박스(Blob)**: 실제 파일 내용
-- **화살표 위 숫자**: Unix 파일 권한 (`100644`=일반 파일, `040000`=디렉토리)
-- **화살표 위 이름**: 파일/폴더 이름 (Tree가 이름을 기억!)
+- 🟢 **초록 박스 (TREE)**: 디렉토리를 나타냄
+- 🟡 **노란 박스 (BLOB)**: 실제 파일 내용
+- **화살표**: 파일/폴더 이름 (Tree가 이름을 기억!)
 
 ---
 
@@ -155,40 +138,28 @@ flowchart TB
 
 **Commit**은 "특정 시점의 프로젝트 전체 상태"를 저장합니다.
 
-<div class="mermaid">
+```mermaid
 flowchart TB
-    subgraph latest[최신 커밋]
-        C3[🔷 commit c3<br/>Add login feature<br/>by Gideok, 2월 3일]
-    end
+    C3[COMMIT 3 - latest]
+    C2[COMMIT 2]
+    C1[COMMIT 1 - initial]
+    T3[TREE]
+    T2[TREE]
+    T1[TREE]
     
-    subgraph second[두번째 커밋]
-        C2[🔷 commit c2<br/>Add README<br/>by Gideok, 2월 2일]
-    end
+    C3 -->|parent| C2
+    C2 -->|parent| C1
+    C3 -->|tree| T3
+    C2 -->|tree| T2
+    C1 -->|tree| T1
     
-    subgraph first[첫번째 커밋]
-        C1[🔷 commit c1<br/>Initial commit<br/>by Gideok, 2월 1일]
-    end
-    
-    subgraph trees[각 시점의 파일 상태]
-        T3[🟢 tree]
-        T2[🟢 tree]
-        T1[🟢 tree]
-    end
-    
-    C3 -->|"parent<br/>이전 커밋"| C2
-    C2 -->|"parent"| C1
-    
-    C3 -->|"tree<br/>파일 상태"| T3
-    C2 -->|"tree"| T2
-    C1 -->|"tree"| T1
-    
-    style C3 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style C2 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style C1 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style T3 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style T2 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style T1 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-</div>
+    style C3 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style C2 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style C1 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style T3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style T2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style T1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+```
 
 **그림 설명:**
 - **세로 방향 (parent)**: 시간순 히스토리. 각 커밋은 이전 커밋을 가리킴
@@ -210,34 +181,23 @@ commit e5f6g7...
 
 지금까지 배운 모든 것을 하나의 그림으로 연결하면:
 
-<div class="mermaid">
+```mermaid
 flowchart TB
-    subgraph refs[References - 사람이 읽을 수 있는 이름]
-        HEAD[📍 HEAD<br/>현재 위치]
-        MAIN[🏷️ main<br/>브랜치]
-    end
+    HEAD[HEAD]
+    MAIN[main branch]
+    C2[COMMIT 2]
+    C1[COMMIT 1]
+    T2[TREE]
+    T1[TREE]
+    B1[README]
+    B2[main.py]
+    B3[login.py]
     
-    subgraph commits[Commits - 히스토리]
-        C2[🔷 commit<br/>feat: login]
-        C1[🔷 commit<br/>init]
-    end
-    
-    subgraph trees[Trees - 디렉토리]
-        T2[🟢 tree]
-        T1[🟢 tree]
-    end
-    
-    subgraph blobs[Blobs - 파일 내용]
-        B1[🟡 README]
-        B2[🟡 main.py]
-        B3[🟡 login.py]
-    end
-    
-    HEAD -->|"ref: main"| MAIN
-    MAIN -->|"커밋 해시"| C2
-    C2 -->|"parent"| C1
-    C2 -->|"tree"| T2
-    C1 -->|"tree"| T1
+    HEAD -->|ref| MAIN
+    MAIN --> C2
+    C2 -->|parent| C1
+    C2 -->|tree| T2
+    C1 -->|tree| T1
     T2 --> B1
     T2 --> B2
     T2 --> B3
@@ -246,22 +206,22 @@ flowchart TB
     
     style HEAD fill:#ffcdd2,stroke:#c62828,stroke-width:2px
     style MAIN fill:#ffcdd2,stroke:#c62828,stroke-width:2px
-    style C2 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style C1 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style T2 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style T1 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style B1 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B2 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B3 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-</div>
+    style C2 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style C1 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style T2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style T1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+```
 
 **읽는 방법 (위에서 아래로):**
 
 1. 🔴 **HEAD** → "지금 내가 어디 있지?" → `main` 브랜치
-2. 🔴 **main** → "이 브랜치의 최신 커밋은?" → `commit c2`
-3. 🔷 **commit** → "이 시점 파일들은?" → `tree` 참조
-4. 🟢 **tree** → "어떤 파일들이 있지?" → `blob`들 나열
-5. 🟡 **blob** → 실제 파일 내용!
+2. 🔴 **main** → "이 브랜치의 최신 커밋은?" → `COMMIT 2`
+3. 🔷 **COMMIT** → "이 시점 파일들은?" → `TREE` 참조
+4. 🟢 **TREE** → "어떤 파일들이 있지?" → `BLOB`들 나열
+5. 🟡 **BLOB** → 실제 파일 내용!
 
 **주목할 점:** `T1`과 `T2` 모두 같은 `README`, `main.py`를 가리킵니다. 파일이 안 바뀌면 같은 blob을 재사용!
 
@@ -303,27 +263,16 @@ $ git cat-file -p abc123
 
 "브랜치"라고 하면 뭔가 거창할 것 같지만...
 
-<div class="mermaid">
+```mermaid
 flowchart LR
-    subgraph file[파일 시스템]
-        A[.git/refs/heads/main]
-    end
+    A[.git/refs/heads/main]
+    B[e5f6g7h8i9j0...]
     
-    subgraph content[파일 내용]
-        B[e5f6g7h8i9j0k1l2...]
-    end
-    
-    subgraph meaning[의미]
-        C[이 커밋이<br/>main 브랜치의<br/>최신이야!]
-    end
-    
-    A -->|cat| B
-    B -->|해석| C
+    A -->|contains| B
     
     style A fill:#ffcdd2,stroke:#c62828,stroke-width:2px
     style B fill:#e0e0e0,stroke:#616161,stroke-width:2px
-    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-</div>
+```
 
 ```bash
 $ cat .git/refs/heads/main
@@ -336,27 +285,22 @@ e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4
 
 ### 🤯 같은 내용은 절대 두 번 저장 안 함
 
-<div class="mermaid">
+```mermaid
 flowchart TB
-    subgraph files[서로 다른 파일]
-        F1[📄 file1.txt<br/>내용: Hello]
-        F2[📄 file2.txt<br/>내용: Hello]
-        F3[📄 copy.txt<br/>내용: Hello]
-    end
+    F1[file1.txt]
+    F2[file2.txt]
+    F3[copy.txt]
+    BLOB[Single BLOB]
     
-    subgraph storage[Git 저장소]
-        BLOB[🟡 단 하나의 blob<br/>해시: aaf4c6...]
-    end
+    F1 -->|same hash| BLOB
+    F2 -->|same hash| BLOB
+    F3 -->|same hash| BLOB
     
-    F1 -->|같은 해시| BLOB
-    F2 -->|같은 해시| BLOB
-    F3 -->|같은 해시| BLOB
-    
-    style F1 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style F2 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style F3 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style BLOB fill:#e8f5e9,stroke:#388e3c,stroke-width:3px
-</div>
+    style F1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style F2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style F3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style BLOB fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+```
 
 **이게 왜 대단할까?**
 - 대형 프로젝트에서 같은 라이선스 파일이 100개 폴더에 있어도 → **저장은 1번**
@@ -367,34 +311,26 @@ flowchart TB
 
 ## 6. 정리
 
-<div class="mermaid">
+```mermaid
 flowchart LR
-    subgraph ui[우리가 보는 것]
-        A1[📁 파일/폴더]
-        A2[🌿 브랜치]
-        A3[📜 커밋 로그]
-    end
-    
-    subgraph internal[Git 내부]
-        B1[🟡 Blob]
-        B2[🟢 Tree]
-        B3[🔷 Commit]
-        B4[🔴 Refs]
-    end
+    A1[Files]
+    A2[Branches]
+    A3[History]
+    B1[BLOB]
+    B2[TREE]
+    B3[COMMIT]
+    B4[REFS]
     
     A1 --> B1
     A1 --> B2
     A2 --> B4
     A3 --> B3
     
-    style A1 fill:#fafafa,stroke:#9e9e9e,stroke-width:1px
-    style A2 fill:#fafafa,stroke:#9e9e9e,stroke-width:1px
-    style A3 fill:#fafafa,stroke:#9e9e9e,stroke-width:1px
-    style B1 fill:#fff8e1,stroke:#f57c00,stroke-width:2px
-    style B2 fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style B3 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
+    style B2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style B3 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
     style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:2px
-</div>
+```
 
 | 우리가 아는 개념 | Git 내부 실체 | 역할 |
 |-----------------|---------------|------|
