@@ -1,7 +1,7 @@
 ---
 title: "블로그를 시작합니다"
 date: 2026-02-03T15:00:00+09:00
-draft: false
+draft: true
 tags: ["블로그", "시작"]
 categories: ["일상"]
 summary: "기술 블로그를 시작합니다. 데이터 엔지니어링, AI, 백엔드 개발 이야기를 나눌 예정입니다."
