@@ -1,0 +1,99 @@
+baseURL = "https://hiddenpunch.github.io/"
+languageCode = "ko-kr"
+title = "Gideok's Tech Blog"
+theme = "PaperMod"
+defaultContentLanguage = "ko"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+pygmentsUseClasses = true
+
+[params]
+  env = "production"
+  title = "Gideok's Tech Blog"
+  description = "데이터 엔지니어링, AI, 백엔드 개발 이야기"
+  keywords = ["Blog", "Data Engineering", "AI", "Kotlin", "Backend", "DevOps"]
+  author = "Gideok"
+  
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = true
+  tocopen = false
+
+  [params.homeInfoParams]
+    Title = "안녕하세요 👋"
+    Content = "데이터 엔지니어링, AI Agent, 백엔드/Kotlin, DevOps에 관심 많은 개발자입니다."
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/hiddenpunch"
+
+[params.cover]
+  hidden = false
+  hiddenInList = false
+  hiddenInSingle = false
+
+[params.editPost]
+  URL = "https://github.com/hiddenpunch/hiddenpunch.github.io/edit/main/content"
+  Text = "수정 제안"
+  appendFilePath = true
+
+[params.fuseOpts]
+  isCaseSensitive = false
+  shouldSort = true
+  location = 0
+  distance = 1000
+  threshold = 0.4
+  minMatchCharLength = 0
+  keys = ["title", "permalink", "summary", "content"]
+
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "archives"
+  name = "Archives"
+  url = "/archives/"
+  weight = 30
+
+[[menu.main]]
+  identifier = "search"
+  name = "Search"
+  url = "/search/"
+  weight = 40
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = true
+    style = "monokai"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
