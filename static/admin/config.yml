@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: hiddenpunch/hiddenpunch.github.io
+  branch: main
+  base_url: https://sveltia-cms-auth.hankchizljaw.com
+
+publish_mode: editorial_workflow
+media_folder: static/images
+public_folder: /images
+
+collections:
+  - name: posts
+    label: 포스트
+    folder: content/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "제목", name: "title", widget: "string" }
+      - { label: "날짜", name: "date", widget: "datetime" }
+      - { label: "요약", name: "summary", widget: "text", required: false }
+      - { label: "태그", name: "tags", widget: "list", required: false }
+      - { label: "카테고리", name: "categories", widget: "list", required: false }
+      - { label: "초안", name: "draft", widget: "boolean", default: false }
+      - { label: "본문", name: "body", widget: "markdown" }
