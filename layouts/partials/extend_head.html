@@ -1,20 +1,6 @@
 {{ if .Params.mermaid }}
-<style>
-  pre.mermaid {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-</style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
-  mermaid.initialize({ 
-    startOnLoad: true, 
-    theme: 'neutral'
-  });
-  mermaid.run().then(() => {
-    document.querySelectorAll('pre.mermaid').forEach(el => {
-      el.style.opacity = '1';
-    });
-  });
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 </script>
 {{ end }}
