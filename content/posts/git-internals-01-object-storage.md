@@ -46,7 +46,7 @@ Git은 복잡해 보이지만, 내부적으로는 단 **세 가지 객체**만 �
 
 아래 그림은 이 세 객체가 어떻게 연결되는지 보여줍니다:
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     C[COMMIT]
     T[TREE]
@@ -61,7 +61,7 @@ flowchart LR
     style T fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
     style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
-```
+</pre>
 
 | 색상 | 객체 | 역할 |
 |------|------|------|
@@ -83,7 +83,7 @@ $ echo "Hello, Git!" | git hash-object -w --stdin
 
 이 과정을 그림으로 보면:
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     A[File Content]
     B[SHA-1 Hash]
@@ -94,7 +94,7 @@ flowchart LR
     style A fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px
     style C fill:#e0e0e0,stroke:#616161,stroke-width:2px
-```
+</pre>
 
 **왜 이렇게 설계했을까?**
 - 🔸 **파일명은 저장 안 함** → 같은 내용이면 파일명이 달라도 하나만 저장 (용량 절약!)
@@ -107,7 +107,7 @@ flowchart LR
 
 **Tree**는 "이 폴더에 어떤 파일/폴더가 있는지"를 기록합니다.
 
-```mermaid
+<pre class="mermaid">
 flowchart TB
     T1[TREE - root]
     B1[BLOB - README]
@@ -125,7 +125,7 @@ flowchart TB
     style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
-```
+</pre>
 
 **그림 설명:**
 - 🟢 **초록 박스 (TREE)**: 디렉토리를 나타냄
@@ -138,7 +138,7 @@ flowchart TB
 
 **Commit**은 "특정 시점의 프로젝트 전체 상태"를 저장합니다.
 
-```mermaid
+<pre class="mermaid">
 flowchart TB
     C3[COMMIT 3 - latest]
     C2[COMMIT 2]
@@ -159,7 +159,7 @@ flowchart TB
     style T3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
     style T2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
     style T1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
-```
+</pre>
 
 **그림 설명:**
 - **세로 방향 (parent)**: 시간순 히스토리. 각 커밋은 이전 커밋을 가리킴
@@ -181,7 +181,7 @@ commit e5f6g7...
 
 지금까지 배운 모든 것을 하나의 그림으로 연결하면:
 
-```mermaid
+<pre class="mermaid">
 flowchart TB
     HEAD[HEAD]
     MAIN[main branch]
@@ -213,7 +213,7 @@ flowchart TB
     style B1 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style B3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
-```
+</pre>
 
 **읽는 방법 (위에서 아래로):**
 
@@ -263,7 +263,7 @@ $ git cat-file -p abc123
 
 "브랜치"라고 하면 뭔가 거창할 것 같지만...
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     A[.git/refs/heads/main]
     B[e5f6g7h8i9j0...]
@@ -272,7 +272,7 @@ flowchart LR
     
     style A fill:#ffcdd2,stroke:#c62828,stroke-width:2px
     style B fill:#e0e0e0,stroke:#616161,stroke-width:2px
-```
+</pre>
 
 ```bash
 $ cat .git/refs/heads/main
@@ -285,7 +285,7 @@ e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4
 
 ### 🤯 같은 내용은 절대 두 번 저장 안 함
 
-```mermaid
+<pre class="mermaid">
 flowchart TB
     F1[file1.txt]
     F2[file2.txt]
@@ -300,7 +300,7 @@ flowchart TB
     style F2 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style F3 fill:#ffecb3,stroke:#f57c00,stroke-width:2px
     style BLOB fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
-```
+</pre>
 
 **이게 왜 대단할까?**
 - 대형 프로젝트에서 같은 라이선스 파일이 100개 폴더에 있어도 → **저장은 1번**
@@ -311,7 +311,7 @@ flowchart TB
 
 ## 6. 정리
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     A1[Files]
     A2[Branches]
@@ -330,7 +330,7 @@ flowchart LR
     style B2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
     style B3 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
     style B4 fill:#ffcdd2,stroke:#c62828,stroke-width:2px
-```
+</pre>
 
 | 우리가 아는 개념 | Git 내부 실체 | 역할 |
 |-----------------|---------------|------|
