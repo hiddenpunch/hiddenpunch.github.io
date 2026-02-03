@@ -82,10 +82,21 @@ pygmentsUseClasses = true
   weight = 30
 
 [[menu.main]]
+  identifier = "series"
+  name = "Series"
+  url = "/series/"
+  weight = 35
+
+[[menu.main]]
   identifier = "search"
   name = "Search"
   url = "/search/"
   weight = 40
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
