@@ -170,8 +170,8 @@ flowchart TB
 commit e5f6g7...
 ├── tree      8a7b3c...     ← 이 시점의 파일 구조 (Tree 해시)
 ├── parent    a1b2c3...     ← 이전 커밋 (히스토리 연결)
-├── author    Gideok        ← 작성자
-├── committer Gideok        ← 커밋한 사람
+├── author    Alice        ← 작성자
+├── committer Alice        ← 커밋한 사람
 └── message   "Add login"   ← 커밋 메시지
 ```
 
@@ -240,8 +240,8 @@ e5f6g7h8i9j0...
 $ git cat-file -p e5f6g7
 tree 8a7b3c4d5e6f...
 parent a1b2c3d4e5f6...
-author Gideok <gideok@example.com> 1706952000 +0900
-committer Gideok <gideok@example.com> 1706952000 +0900
+author Alice <alice@example.com> 1706952000 +0900
+committer Alice <alice@example.com> 1706952000 +0900
 
 Add new feature
 
