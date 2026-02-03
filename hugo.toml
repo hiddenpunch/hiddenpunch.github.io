@@ -1,6 +1,6 @@
 baseURL = "https://hiddenpunch.github.io/"
 languageCode = "ko-kr"
-title = "Gideok's Tech Blog"
+title = "Hiddenpunch's Tech Blog"
 theme = "PaperMod"
 defaultContentLanguage = "ko"
 
@@ -12,10 +12,10 @@ pygmentsUseClasses = true
 
 [params]
   env = "production"
-  title = "Gideok's Tech Blog"
+  title = "Hiddenpunch's Tech Blog"
   description = "데이터 엔지니어링, AI, 백엔드 개발 이야기"
   keywords = ["Blog", "Data Engineering", "AI", "Kotlin", "Backend", "DevOps"]
-  author = "Gideok"
+  author = "Hiddenpunch"
   
   defaultTheme = "auto"
   disableThemeToggle = false
