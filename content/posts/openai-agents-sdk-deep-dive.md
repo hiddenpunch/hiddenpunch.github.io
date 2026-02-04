@@ -5,7 +5,7 @@ summary: "OpenAI가 만든 멀티 에이전트 프레임워크. 어떻게 구성
 tags: ["ai-agent", "해체분석기", "openai", "agents-sdk"]
 categories: ["AI"]
 series: ["해체분석기"]
-draft: true
+draft: false
 mermaid: true
 ---
 
