@@ -14,19 +14,17 @@ mermaid: true
 
 ## 들어가며
 
-Git은 이제 개발자의 필수 도구다. 하지만 Git이 왜, 어떻게 만들어졌는지 아는 사람은 많지 않다.
+2005년 4월, Linux 커널 개발이 멈출 위기에 처했다.
 
-2005년 4월, Linus Torvalds는 **10일 만에** 동작하는 버전 관리 시스템을 만들었다. Linux 커널 개발이 중단될 위기에서.
+그리고 Linus Torvalds는 **10일 만에** 새로운 버전 관리 시스템을 만들어냈다.
 
 오늘은 Git의 탄생 배경과 첫 커밋(`e83c5163`)을 직접 열어본다.
 
 ---
 
-## 1. 왜 Git을 만들었나?
+## 1. 2005년 4월, 무슨 일이 있었나?
 
-### 1.1 BitKeeper 사건
-
-2005년 이전, Linux 커널 개발의 역사:
+### 1.1 Linux 커널 개발의 역사
 
 ```
 1991~2002: tarball + 이메일 패치
@@ -38,42 +36,47 @@ Git은 이제 개발자의 필수 도구다. 하지만 Git이 왜, 어떻게 만
            → 개발 속도 폭발적 증가 🚀
 ```
 
-BitKeeper는 혁신적이었다. 분산 버전 관리, 효율적인 머지, 빠른 속도. Linux 커널 개발에 날개를 달아줬다.
+BitKeeper는 당시로서는 혁신적인 도구였다. **분산 버전 관리**, 효율적인 머지, 빠른 속도. Linux 커널처럼 전 세계에서 동시에 개발하는 프로젝트에 딱 맞았다.
 
-**그러나 2005년 4월, 사건이 터진다.**
+문제는 BitKeeper가 **상용 소프트웨어**였다는 것. BitMover사가 오픈소스 프로젝트에 한해 무료로 제공하고 있었다.
 
-Andrew Tridgell(Samba 창시자)이 BitKeeper의 프로토콜을 리버스 엔지니어링했다. 오픈소스 대안을 만들기 위해서. BitMover(BitKeeper 개발사)는 이를 라이선스 위반으로 보고, **Linux 커널 팀의 무료 사용권을 철회**했다.
+### 1.2 BitKeeper 사건
 
-### 1.2 Linus의 선택지
+2005년 4월, Andrew Tridgell(Samba 창시자)이 BitKeeper의 프로토콜을 리버스 엔지니어링했다. 오픈소스 대안을 만들기 위해서.
 
-Linux 커널 개발이 멈출 위기. Linus 앞에 놓인 선택지:
+BitMover는 이를 라이선스 위반으로 보고, **Linux 커널 팀의 무료 사용권을 철회**했다.
 
-| 선택지 | Linus의 평가 |
-|-------|-------------|
+**Linux 커널 개발이 멈출 위기.**
+
+### 1.3 Linus의 선택
+
+당시 존재하던 오픈소스 버전 관리 도구들:
+
+| 도구 | Linus의 평가 |
+|-----|-------------|
 | **CVS** | "역사상 가장 멍청한 프로그램" |
 | **Subversion** | "CVS를 제대로 만들려다 실패한 것" |
-| **직접 만든다** | ✅ |
 
-Linus는 기존 도구들이 마음에 들지 않았다. 특히 **중앙 집중식** 구조와 **느린 브랜치/머지**가 문제였다.
+둘 다 **중앙 집중식**이었고, Linux 커널 규모의 프로젝트에는 맞지 않았다.
 
-### 1.3 10일의 기적
+Linus의 결정: **직접 만든다.**
+
+### 1.4 10일의 기록
 
 ```
-2005년 4월 3일: 마지막 BitKeeper 기반 릴리즈 (2.6.12-rc2)
-2005년 4월 6일: Linus, Git 개발 시작 발표
-2005년 4월 7일: Git 첫 커밋 🎉
-2005년 4월 17일: 첫 Linux 커널 머지 성공
+4월 3일: 마지막 BitKeeper 기반 릴리즈 (2.6.12-rc2)
+4월 6일: Linus, 새 버전 관리 시스템 개발 시작 발표
+4월 7일: Git 첫 커밋 🎉
+4월 17일: Git으로 첫 Linux 커널 머지 성공
 ```
-
-**10일 만에 동작하는 버전 관리 시스템**을 만들었다. 물론 기능은 최소한이었지만, 핵심 설계는 지금과 거의 같다.
 
 ---
 
-## 2. 기존 도구들의 문제점
+## 2. 기존 도구들의 문제
 
-Git이 해결하려 한 문제를 이해하려면, 당시 도구들의 한계를 알아야 한다.
+Git이 해결하려 한 문제를 이해하려면, CVS/SVN의 한계를 알아야 한다.
 
-### 2.1 CVS/SVN의 구조
+### 2.1 중앙 집중식 구조
 
 <pre class="mermaid">
 flowchart TB
@@ -97,37 +100,34 @@ flowchart TB
     style D3 fill:#bbdefb,stroke:#1976d2,stroke-width:2px
 </pre>
 
-**중앙 집중식**. 모든 작업이 서버를 거쳐야 했다.
+CVS와 SVN은 모든 작업이 **중앙 서버를 거쳐야** 했다.
 
-### 2.2 문제점들
+### 2.2 구체적인 문제들
 
 | 문제 | 설명 |
 |-----|------|
 | 🔴 **서버 의존** | 커밋하려면 네트워크 연결 필수 |
 | 🔴 **오프라인 불가** | 비행기에서 코딩? 커밋 못함 |
-| 🔴 **느린 브랜치** | SVN의 브랜치 = 전체 복사 (느림) |
-| 🔴 **단일 장애점** | 서버 죽으면 모든 히스토리 손실 위험 |
-| 🔴 **느린 히스토리** | 로그 보려면 서버에 요청해야 함 |
+| 🔴 **느린 브랜치** | SVN의 브랜치 = 전체 디렉토리 복사 |
+| 🔴 **단일 장애점** | 서버 죽으면 히스토리 손실 위험 |
+| 🔴 **느린 히스토리** | 로그 조회도 서버에 요청 |
 
-Linux 커널처럼 **전 세계 수천 명이 동시에 개발**하는 프로젝트에서 이런 구조는 치명적이었다.
+Linux 커널은 **전 세계 수천 명**이 동시에 개발한다. 중앙 서버 하나로는 감당이 안 됐다.
 
-### 2.3 Git의 해결책
+### 2.3 Git의 접근: 분산형
 
 <pre class="mermaid">
 flowchart TB
     subgraph d1[Developer 1]
         R1[(Full Repo)]
-        W1[Working Dir]
     end
     
     subgraph d2[Developer 2]
         R2[(Full Repo)]
-        W2[Working Dir]
     end
     
     subgraph d3[Developer 3]
         R3[(Full Repo)]
-        W3[Working Dir]
     end
     
     R1 <-->|push/pull| R2
@@ -139,23 +139,20 @@ flowchart TB
     style R3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
 </pre>
 
-**분산형**. 모든 개발자가 전체 히스토리를 가진다.
+**모든 개발자가 전체 히스토리를 가진다.**
 
-| 해결책 | 효과 |
-|-------|-----|
-| 🟢 **로컬 저장소** | 서버 없이 커밋 가능 |
-| 🟢 **오프라인 작업** | 나중에 동기화하면 됨 |
-| 🟢 **빠른 브랜치** | 브랜치 = 포인터 (즉시 생성) |
-| 🟢 **모든 클론이 백업** | 서버 죽어도 복구 가능 |
-| 🟢 **로컬 히스토리** | 네트워크 없이 로그 조회 |
+- 서버 없이 로컬에서 커밋
+- 오프라인 작업 가능
+- 모든 클론이 백업
+- 히스토리 조회도 로컬에서
 
 ---
 
-## 3. Git 첫 커밋 열어보기
+## 3. Git 첫 커밋 분석
 
-실제로 첫 커밋을 열어보자. 커밋 해시는 `e83c5163316f89bfbde7d9ab23ca2e25604af290`.
+커밋 해시: `e83c5163316f89bfbde7d9ab23ca2e25604af290`
 
-### 3.1 파일 목록
+### 3.1 파일 구조
 
 ```
 git/
@@ -172,11 +169,31 @@ git/
 └── cat-file.c       ← 객체 내용 출력
 ```
 
-**10개 파일, 약 1000줄**. 이게 Git의 시작이다.
+**10개 파일, 약 1000줄**. 이게 전부다.
 
-### 3.2 README: Linus의 설계 철학
+### 3.2 Makefile
 
-README 파일 첫 부분:
+```makefile
+CFLAGS=-g
+CC=gcc
+
+PROG=update-cache show-diff init-db write-tree read-tree commit-tree cat-file
+
+all: $(PROG)
+
+LIBS= -lssl
+```
+
+빌드하면 **7개의 실행 파일**이 만들어진다:
+- `init-db`: 저장소 초기화
+- `update-cache`: 파일을 캐시에 추가
+- `write-tree`: 캐시에서 트리 객체 생성
+- `commit-tree`: 커밋 객체 생성
+- `read-tree`: 트리 객체 읽기
+- `show-diff`: 차이점 보기
+- `cat-file`: 객체 내용 출력
+
+### 3.3 README: Linus의 설계 철학
 
 ```
 GIT - the stupid content tracker
@@ -190,62 +207,70 @@ GIT - the stupid content tracker
  - "goddamn idiotic truckload of sh*t": when it breaks
 ```
 
-Linus 특유의 유머. 하지만 핵심 설계 철학도 담겨있다:
+Linus 특유의 유머. 핵심 설계 철학도 여기 있다:
 
-> "This is a stupid (but extremely fast) directory content manager."
+> "This is a stupid (but extremely fast) directory content manager.
+> It doesn't do a whole lot, but what it _does_ do is track 
+> directory contents efficiently."
 
-**멍청하지만 극도로 빠른**. 복잡한 기능 대신 단순하고 빠른 핵심에 집중했다.
+**멍청하지만 극도로 빠른**. 복잡한 기능 대신 단순하고 빠른 핵심에 집중.
 
-### 3.3 두 가지 핵심 추상화
+---
+
+## 4. 핵심 설계: 두 가지 추상화
 
 README에서 Linus는 Git의 핵심을 두 가지로 설명한다:
 
 ```
-There are two object abstractions:
-1. The "object database"
-2. The "current directory cache"
+There are two object abstractions: 
+the "object database", and the "current directory cache".
 ```
 
-**Object Database**와 **Directory Cache**. 지금의 `.git/objects`와 `.git/index`의 원형이다.
-
----
-
-## 4. Object Database: 내용 주소 저장소
-
-### 4.1 핵심 아이디어
-
-README에서:
+### 4.1 Object Database
 
 > "The object database is literally just a content-addressable 
 > collection of objects. All objects are named by their content, 
 > which is approximated by the SHA1 hash of the object itself."
 
-**Content-addressable**: 내용이 곧 주소다. 파일 내용의 SHA1 해시가 파일명이 된다.
+**Content-addressable**: 내용이 곧 주소다.
 
 ```
-"Hello, Git!" → SHA1 → 557db03de997c86a4a028e1ebd3a1ceb225be238
-                              ↓
-               저장 위치: .dircache/objects/55/7db03...
+파일 내용 "Hello" → SHA1 해시 계산 → aaf4c61d...
+                                        ↓
+                    저장 위치: .dircache/objects/aa/f4c61d...
 ```
 
 ### 4.2 세 가지 객체 타입
 
-| 객체 | 역할 |
-|-----|------|
-| **BLOB** | 파일 내용 (이름/권한 없음) |
-| **TREE** | 디렉토리 구조 (이름 → BLOB 매핑) |
-| **CHANGESET** | 커밋 (나중에 "commit"으로 개명) |
+README에서 정의한 객체 타입:
+
+**BLOB**:
+> "A blob object is nothing but a binary blob of data, and doesn't
+> refer to anything else. There is no signature or any other 
+> verification of the data... No name associations, no permissions.
+> It is purely a blob of data (ie normally 'file contents')."
+
+**TREE**:
+> "A tree object is a list of permission/name/blob data, sorted by name.
+> In other words the tree object is uniquely determined by the set 
+> contents, and so two separate but identical trees will always share 
+> the exact same object."
+
+**CHANGESET** (커밋):
+> "The changeset object introduces the notion of history into the picture.
+> In contrast to the other objects, it doesn't just describe the physical 
+> state of a tree, it describes how we got there, and why."
 
 <pre class="mermaid">
 flowchart TB
-    C[CHANGESET<br/>커밋 정보]
-    T[TREE<br/>디렉토리 구조]
-    B1[BLOB<br/>README 내용]
-    B2[BLOB<br/>main.c 내용]
+    C[CHANGESET<br/>커밋 정보<br/>author, message]
+    T[TREE<br/>디렉토리 구조<br/>name → blob 매핑]
+    B1[BLOB<br/>파일 A 내용]
+    B2[BLOB<br/>파일 B 내용]
     
     C -->|tree| T
-    T -->|README| B1
-    T -->|main.c| B2
+    T -->|file_a| B1
+    T -->|file_b| B2
     
     style C fill:#bbdefb,stroke:#1976d2,stroke-width:2px
     style T fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
@@ -253,40 +278,25 @@ flowchart TB
     style B2 fill:#fff3e0,stroke:#f57c00,stroke-width:2px
 </pre>
 
-### 4.3 init-db.c: 저장소 초기화
+### 4.3 Directory Cache
 
-첫 커밋의 `init-db.c`:
+> "The current directory cache is a simple binary file, which contains
+> an efficient representation of a virtual directory content at some 
+> random time."
 
-```c
-int main(int argc, char **argv)
-{
-    // .dircache 디렉토리 생성 (지금의 .git)
-    if (mkdir(".dircache", 0700) < 0) {
-        perror("unable to create .dircache");
-        exit(1);
-    }
+작업 중인 파일들의 상태를 캐싱한다. 두 가지 목적:
 
-    // .dircache/objects/00 ~ ff (256개 디렉토리) 생성
-    for (i = 0; i < 256; i++) {
-        sprintf(path+len, "/%02x", i);
-        mkdir(path, 0700);
-    }
-    return 0;
-}
-```
-
-**`.git`이 아니라 `.dircache`였다!** 
-
-256개의 하위 디렉토리(00~ff)를 미리 생성한다. SHA1 해시의 첫 2자리로 분류하기 위해서.
+1. **상태 복원**: 캐시된 상태를 완벽히 재생성할 수 있다
+2. **변경 감지**: 현재 파일과의 차이를 빠르게 찾을 수 있다
 
 ---
 
-## 5. Directory Cache: 스테이징 영역
+## 5. 코드 살펴보기
 
 ### 5.1 cache.h: 핵심 자료구조
 
 ```c
-#define DEFAULT_DB_ENVIRONMENT ".dircache/objects"
+#define CACHE_SIGNATURE 0x44495243	/* "DIRC" */
 
 struct cache_entry {
     struct cache_time ctime;
@@ -301,80 +311,73 @@ struct cache_entry {
     unsigned short namelen;
     unsigned char name[0];       // 파일명 (가변 길이)
 };
+
+#define DB_ENVIRONMENT "SHA1_FILE_DIRECTORY"
+#define DEFAULT_DB_ENVIRONMENT ".dircache/objects"
 ```
 
-이게 지금의 **staging area** (`.git/index`)의 원형이다.
+캐시 엔트리에는:
+- 파일 메타데이터 (시간, 권한, 크기)
+- 파일 내용의 SHA1 해시
+- 파일명
 
-파일의 메타데이터(시간, 권한, 크기)와 SHA1 해시를 저장한다. **파일이 변경됐는지 빠르게 확인**하기 위해서.
+이 정보로 파일이 변경됐는지 **빠르게 확인**할 수 있다.
 
-### 5.2 캐시의 역할
-
-README에서:
-
-> "The current directory cache certainly does not need to be 
-> consistent with the current directory contents, but it has 
-> two very important attributes:
->
-> (a) it can re-generate the full state it caches
-> (b) it has efficient methods for finding inconsistencies"
-
-두 가지 역할:
-1. 캐시된 상태를 완벽히 복원할 수 있다
-2. 현재 파일과의 차이를 빠르게 찾을 수 있다
-
----
-
-## 6. 초창기 명령어
-
-### 6.1 명령어 매핑
-
-첫 버전의 명령어와 현재의 대응:
-
-| 1차 버전 | 현재 | 역할 |
-|---------|------|------|
-| `init-db` | `git init` | 저장소 초기화 |
-| `update-cache <file>` | `git add` | 스테이징 |
-| `write-tree` | (내부) | 캐시 → 트리 객체 |
-| `commit-tree <tree>` | (내부) | 트리 → 커밋 |
-| `cat-file <sha1>` | `git cat-file` | 객체 내용 보기 |
-| `show-diff` | `git diff` | 차이점 보기 |
-| `read-tree <sha1>` | (내부) | 트리 객체 읽기 |
-
-### 6.2 없었던 것들
-
-첫 버전에는 **없었다**:
-
-- ❌ `git log` - 히스토리 보기
-- ❌ `git branch` - 브랜치 관리
-- ❌ `git merge` - 머지
-- ❌ `git clone` - 저장소 복제
-- ❌ `git push / pull` - 원격 저장소
-- ❌ `git checkout` - 브랜치 전환
-
-**정말 최소한의 기능만** 있었다. 파일을 객체로 저장하고, 커밋을 만드는 것까지.
-
-### 6.3 commit-tree.c: 커밋 만들기
-
-커밋을 만드는 코드 일부:
+### 5.2 init-db.c: 저장소 초기화
 
 ```c
 int main(int argc, char **argv)
 {
-    // 커밋 정보 수집
+    // .dircache 디렉토리 생성
+    if (mkdir(".dircache", 0700) < 0) {
+        perror("unable to create .dircache");
+        exit(1);
+    }
+
+    /*
+     * If you want to, you can share the DB area with any 
+     * number of branches. That has advantages: you can save 
+     * space by sharing all the SHA1 objects.
+     */
+    sha1_dir = DEFAULT_DB_ENVIRONMENT;  // ".dircache/objects"
+    
+    // objects/00 ~ objects/ff (256개 디렉토리) 생성
+    for (i = 0; i < 256; i++) {
+        sprintf(path+len, "/%02x", i);
+        mkdir(path, 0700);
+    }
+    return 0;
+}
+```
+
+저장소를 초기화하면:
+1. `.dircache/` 디렉토리 생성
+2. `.dircache/objects/00` ~ `ff` (256개) 디렉토리 생성
+
+SHA1 해시의 첫 2자리로 객체를 분류하기 위해서다.
+
+### 5.3 commit-tree.c: 커밋 만들기
+
+```c
+int main(int argc, char **argv)
+{
+    // 사용자 정보 가져오기
     pw = getpwuid(getuid());
     if (!pw)
-        usage("You don't exist. Go away!");  // Linus식 에러 메시지 😂
+        usage("You don't exist. Go away!");
     
-    // 커밋 메시지 구성
+    // 커밋 내용 구성
     add_buffer(&buffer, &size, "tree %s\n", sha1_to_hex(tree_sha1));
     
+    // 부모 커밋들 (머지의 경우 여러 개)
     for (i = 0; i < parents; i++)
         add_buffer(&buffer, &size, "parent %s\n", sha1_to_hex(parent_sha1[i]));
     
+    // author와 committer 정보
     add_buffer(&buffer, &size, "author %s <%s> %s\n", gecos, email, date);
     add_buffer(&buffer, &size, "committer %s <%s> %s\n\n", realgecos, realemail, realdate);
     
-    // stdin에서 커밋 메시지 읽기
+    // 커밋 메시지 (stdin에서 읽음)
     while (fgets(comment, sizeof(comment), stdin) != NULL)
         add_buffer(&buffer, &size, "%s", comment);
     
@@ -383,98 +386,121 @@ int main(int argc, char **argv)
 }
 ```
 
-`"You don't exist. Go away!"` - 사용자 정보를 못 찾으면 나오는 에러 메시지. Linus의 유머가 코드 곳곳에 있다.
+커밋 객체의 구조가 보인다:
+```
+tree <tree-sha1>
+parent <parent-sha1>
+author <name> <email> <date>
+committer <name> <email> <date>
+
+<commit message>
+```
+
+**다중 부모**도 이미 지원한다:
+
+```c
+/*
+ * Having more than two parents may be strange, but hey, there's
+ * no conceptual reason why the file format couldn't accept multi-way
+ * merges. It might be the "union" of several packages, for example.
+ */
+#define MAXPARENT (16)
+```
+
+Linux 커널처럼 여러 브랜치를 동시에 머지하는 상황을 고려한 것이다.
+
+---
+
+## 6. 아직 없는 것들
+
+첫 버전에는 **최소한의 기능만** 있다:
+
+✅ 있는 것:
+- 저장소 초기화
+- 파일을 객체로 저장
+- 트리 구조 생성
+- 커밋 생성
+- diff 보기
+- 객체 내용 확인
+
+❌ 없는 것:
+- 히스토리 조회 (log)
+- 브랜치 관리
+- 머지
+- 원격 저장소 연동
+- 체크아웃
+
+**진짜 뼈대만** 있다. 하지만 핵심 설계 - Object Database와 content-addressable 저장 - 는 완성됐다.
 
 ---
 
 ## 7. 설계 목표 정리
 
-Linus가 Git을 만들 때 세운 목표:
+Linus가 Git을 만들 때 세운 목표들:
 
 ### 7.1 속도
 
-> 목표: 6.7 patches/second
-
-기존 도구들이 느렸던 이유는 네트워크 의존과 비효율적인 자료구조. Git은 로컬 작업과 해시 기반 저장으로 극복했다.
+BitKeeper 수준의 속도. 초당 수 개의 패치를 처리할 수 있어야 한다.
 
 ### 7.2 데이터 무결성
 
+README에서:
 > "You _can_ trust that an object is intact and has not been 
-> messed with by external sources."
+> messed with by external sources. So the name of an object 
+> uniquely identifies a known state."
 
-모든 객체가 SHA1으로 검증된다. 내용이 조금이라도 바뀌면 해시가 달라지므로 조작을 감지할 수 있다.
+모든 객체가 SHA1으로 검증된다. 내용이 조금이라도 바뀌면 해시가 달라지므로 **조작을 감지**할 수 있다.
 
 ### 7.3 단순함
 
 > "This is a stupid (but extremely fast) directory content manager."
 
-복잡한 기능 대신 핵심에 집중. Object Database와 Directory Cache, 두 가지 추상화만으로 버전 관리의 본질을 구현했다.
+복잡한 기능 대신 **핵심에 집중**. 두 가지 추상화(Object Database, Directory Cache)만으로 버전 관리의 본질을 구현했다.
 
-### 7.4 비선형 개발 지원
+### 7.4 분산 개발 지원
 
-README에서:
+중앙 서버 없이 각자 전체 히스토리를 가진다. 나중에 동기화하면 된다.
 
-> "Having more than two parents may be strange, but hey, there's
-> no conceptual reason why the file format couldn't accept multi-way
-> merges."
+### 7.5 비선형 개발
 
-처음부터 **다중 부모 커밋**(octopus merge)을 고려했다. Linux 커널처럼 수많은 브랜치가 동시에 개발되는 환경을 위해서.
-
----
-
-## 8. 20년이 지난 지금
-
-첫 커밋의 핵심 설계는 **20년이 지난 지금도 그대로**다:
-
-| 2005년 | 2025년 |
-|--------|--------|
-| `.dircache/` | `.git/` |
-| `changeset` | `commit` |
-| `init-db` | `git init` |
-| `update-cache` | `git add` |
-| Object Database | Object Database (동일) |
-| Directory Cache | Index / Staging Area |
-
-물론 기능은 엄청나게 많아졌다. 브랜치, 머지, 리모트, 서브모듈, worktree, sparse checkout...
-
-하지만 **핵심 구조는 10일 만에 만들어진 그 설계 그대로**다.
+처음부터 다중 부모 커밋을 고려했다. Linux 커널처럼 **수많은 브랜치가 동시에 개발**되는 환경을 위해서.
 
 ---
 
 ## 마무리
 
-Git의 탄생은 여러 교훈을 준다:
+Git 첫 버전은 **10개 파일, 1000줄**이다.
 
-1. **단순함의 힘**: 두 가지 추상화(Object Database, Directory Cache)로 버전 관리의 본질을 잡았다.
+하지만 핵심 아이디어는 명확하다:
 
-2. **좋은 설계는 오래 간다**: 20년 전 설계가 지금도 유효하다.
+1. **Content-addressable storage**: 내용의 SHA1 해시가 곧 주소
+2. **세 가지 객체**: Blob(파일), Tree(디렉토리), Changeset(커밋)
+3. **분산형**: 모든 클론이 전체 히스토리를 가짐
+4. **단순함**: "stupid content tracker"
 
-3. **제약이 혁신을 낳는다**: BitKeeper 사건이 없었다면 Git도 없었을지 모른다.
+복잡한 기능은 없지만, **근본적인 설계가 탄탄**하다. 
 
-4. **Linus의 실력**: 10일 만에 동작하는 VCS를 만든 건 역시 천재의 영역이다.
-
-다음에는 Git이 어떻게 진화했는지, 특히 브랜치와 머지가 어떻게 추가됐는지 살펴보자.
+Linus는 10일 만에 이걸 만들어냈다.
 
 ---
 
 ## 직접 확인해보기
 
-첫 커밋을 직접 확인하고 싶다면:
+첫 커밋을 직접 보고 싶다면:
 
 ```bash
 git clone https://github.com/git/git
 cd git
-git log --oneline --reverse | head -1  # 첫 커밋 확인
 git checkout e83c5163316f89bfbde7d9ab23ca2e25604af290
-ls  # 10개 파일 확인
-cat README  # Linus의 설명 읽기
+ls                    # 10개 파일
+cat README            # Linus의 설명
+cat init-db.c         # 저장소 초기화 코드
 ```
 
 ---
 
 ## 참고 자료
 
-- [Git 첫 커밋 (GitHub)](https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290)
-- [The Git Origin Story (Linux Journal)](https://www.linuxjournal.com/content/git-origin-story)
-- [BitKeeper and Linux: The Story of Git's Creation (Graphite)](https://graphite.com/blog/bitkeeper-linux-story-of-git-creation)
-- [A Short History of Git (Git Book)](https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git)
+- [Git 첫 커밋](https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290)
+- [The Git Origin Story](https://www.linuxjournal.com/content/git-origin-story)
+- [BitKeeper and Linux: The Story of Git's Creation](https://graphite.com/blog/bitkeeper-linux-story-of-git-creation)
