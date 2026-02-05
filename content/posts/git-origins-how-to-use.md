@@ -85,10 +85,10 @@ $ update-cache hello.txt
 
 <pre class="mermaid">
 flowchart LR
-    F[hello.txt<br/>"Hello, Git!"]
+    F[hello.txt]
     H[SHA1 계산]
-    B[Blob 객체<br/>.dircache/objects/55/7db03...]
-    I[Index 캐시<br/>.dircache/index]
+    B[Blob 객체]
+    I[Index 캐시]
     
     F --> H
     H --> B
