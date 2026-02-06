@@ -76,21 +76,11 @@ flowchart LR
 
 ### 이름이 바뀌다
 
-Day 5, 중요한 커밋:
-
 ```
 4bb04f2 Rename ".dircache" directory to ".git"
 ```
 
-`.dircache` → `.git`
-
-왜 바꿨을까? 
-
-`.dircache`는 **캐시**라는 의미가 강하다. "임시 저장소" 느낌.
-
-하지만 Linus는 이게 단순한 캐시가 아니라 **전체 프로젝트의 역사**를 담는 곳이 될 거라는 걸 알았다.
-
-`.git` - 더 범용적인 이름.
+`.dircache`(캐시) → `.git`(프로젝트 저장소). 단순 캐시가 아니라 전체 역사를 담는 곳이 될 거라는 걸 알았기 때문.
 
 ### 히스토리 추적 시작
 
@@ -189,11 +179,31 @@ b51ad43 Merge the new object model thing from Daniel Barkalow
 8ccfbf3 Update "git-pull-script"
 ```
 
-다른 저장소에서 변경사항을 **가져오는** 스크립트.
+이 전까지 다른 사람 작업을 가져오려면?
 
-아직 `git push`는 없다. rsync로 파일을 복사하는 수준.
+```bash
+# 수동으로 object 폴더 복사
+cp -r /다른사람/repo/.git/objects/* .git/objects/
+# 그리고 수동으로 머지...
+```
 
-하지만 **분산 개발의 기반**이 마련됐다.
+`git-pull-script`가 이걸 **자동화**했다:
+
+```bash
+# 1) rsync로 상대방 objects 가져오기
+rsync -avz remote:.git/objects/ .git/objects/
+
+# 2) 상대방의 HEAD 커밋 확인
+# 3) 내 HEAD와 머지
+```
+
+왜 의미있나?
+
+- **분산 VCS의 핵심**: "각자 전체 히스토리를 갖고, 필요할 때 동기화"
+- 중앙 서버 없이 **peer-to-peer**로 코드 공유 가능
+- 아직 rsync 기반이지만, 이후 ssh/http/git 프로토콜로 발전
+
+`git push`는? 아직 없다. 이때는 **pull만**. 상대방이 내 저장소에서 pull하는 방식으로 공유했다.
 
 ---
 
