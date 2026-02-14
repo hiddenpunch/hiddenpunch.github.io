@@ -363,7 +363,7 @@ git push origin master
 
 하지만 아직 하나가 부족하다: **용량 최적화**.
 
-Git이 수만 개의 object를 어떻게 효율적으로 저장할까?
+Git이 수백만 개의 object를 어떻게 효율적으로 저장할까?
 
 [해체분석기 #11: Pack 파일의 비밀](/posts/git-pack-files/)에서 계속.
 
