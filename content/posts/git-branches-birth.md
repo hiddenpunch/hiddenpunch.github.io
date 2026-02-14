@@ -288,7 +288,7 @@ Branch가 생겼으니 이제 **공유**할 차례다.
 - fetch, pull, push의 등장
 - remote와 origin의 탄생
 
-[해체분석기 #9: Remote의 진화](/posts/git-remote-evolution/)에서 계속.
+[해체분석기 #10: Remote는 어떻게 탄생했나](/posts/git-remote-evolution/)에서 계속.
 
 ---
 
