@@ -1,6 +1,29 @@
 {{ if .Params.mermaid }}
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
-  mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+  document.addEventListener('DOMContentLoaded', function() {
+    mermaid.initialize({ 
+      startOnLoad: false, 
+      theme: 'neutral',
+      securityLevel: 'loose'
+    });
+    
+    // Find all code blocks with language-mermaid class
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeBlock) {
+      const pre = codeBlock.parentElement;
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = codeBlock.textContent;
+      pre.parentElement.replaceChild(mermaidDiv, pre);
+    });
+    
+    mermaid.run();
+  });
 </script>
+<style>
+  .mermaid {
+    text-align: center;
+    margin: 1.5em 0;
+  }
+</style>
 {{ end }}
