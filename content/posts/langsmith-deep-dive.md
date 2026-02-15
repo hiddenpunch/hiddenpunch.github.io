@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #5: LangSmith 구조와 원리"
+title: "Agent 해체분석기 #4: LangSmith 구조와 원리"
 date: 2026-02-05T20:30:00+09:00
 summary: "LangChain 에코시스템의 LLM Observability 플랫폼. 어떻게 trace를 수집하고, 어디에 저장하고, 무엇을 분석할 수 있는지 뜯어봅니다"
 tags: ["llm", "해체분석기", "langsmith", "observability", "tracing"]
 categories: ["AI"]
-series: ["해체분석기"]
+series: ["Agent 해체분석기"]
+series_order: 4
 draft: false
 mermaid: true
 ---

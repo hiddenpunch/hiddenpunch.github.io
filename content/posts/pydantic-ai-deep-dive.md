@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #4: Pydantic AI - FastAPI 느낌의 Agent 프레임워크"
+title: "Agent 해체분석기 #3: Pydantic AI - FastAPI 느낌의 Agent 프레임워크"
 date: 2026-02-04T12:30:00+09:00
 summary: "Pydantic 팀이 만든 타입 안전한 AI Agent 프레임워크. 의존성 주입, 구조화된 출력, Graph까지 뜯어봅니다"
 tags: ["ai-agent", "해체분석기", "pydantic-ai", "pydantic"]
 categories: ["AI"]
-series: ["해체분석기"]
+series: ["Agent 해체분석기"]
+series_order: 3
 draft: false
 mermaid: true
 ---

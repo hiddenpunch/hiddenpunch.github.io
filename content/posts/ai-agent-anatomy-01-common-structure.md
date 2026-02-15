@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #2: AI Agent의 공통 구조"
+title: "Agent 해체분석기 #1: AI Agent의 공통 구조"
 date: 2026-02-03T21:54:00+09:00
 summary: "LangGraph, AutoGen, CrewAI, DSPy... 실제 GitHub을 뜯어보며 공통점과 차이점을 분석합니다"
 tags: ["ai-agent", "해체분석기", "langgraph", "autogen", "crewai", "dspy"]
 categories: ["AI"]
-series: ["해체분석기"]
+series: ["Agent 해체분석기"]
+series_order: 1
 draft: false
 mermaid: true
 ---

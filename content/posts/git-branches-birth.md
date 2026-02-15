@@ -1,10 +1,10 @@
 ---
-title: "해체분석기 #9: Branch는 어떻게 탄생했나"
+title: "Git 해체분석기 #5: Branch는 어떻게 탄생했나"
 date: 2026-02-06T16:00:00+09:00
 draft: false
 tags: ["git", "해체분석기", "branch", "refs"]
-series: ["해체분석기"]
-series_order: 9
+series: ["Git 해체분석기"]
+series_order: 5
 mermaid: true
 toc: true
 ---

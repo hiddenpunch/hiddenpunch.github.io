@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #8: Git 진화의 첫 2주"
+title: "Git 해체분석기 #4: Git 진화의 첫 2주"
 date: 2026-02-06T15:00:00+09:00
 summary: "2005년 4월, Git은 2주 만에 완전히 다른 도구가 됐다. 어떤 개념들이 언제, 왜 추가됐을까?"
 tags: ["git", "해체분석기", "history", "linus-torvalds"]
 categories: ["개발"]
-series: ["해체분석기"]
+series: ["Git 해체분석기"]
+series_order: 4
 draft: false
 mermaid: true
 ---

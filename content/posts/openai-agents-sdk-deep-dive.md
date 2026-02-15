@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #3: OpenAI Agents SDK 깊게 파보기"
+title: "Agent 해체분석기 #2: OpenAI Agents SDK 깊게 파보기"
 date: 2026-02-04T10:12:00+09:00
 summary: "OpenAI가 만든 멀티 에이전트 프레임워크. 어떻게 구성되어 있고, 각 컴포넌트가 어떤 역할을 하는지 뜯어봅니다"
 tags: ["ai-agent", "해체분석기", "openai", "agents-sdk"]
 categories: ["AI"]
-series: ["해체분석기"]
+series: ["Agent 해체분석기"]
+series_order: 2
 draft: false
 mermaid: true
 ---

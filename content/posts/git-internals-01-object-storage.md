@@ -1,10 +1,11 @@
 ---
-title: "해체분석기 #1: Git은 어떻게 파일을 저장할까?"
+title: "Git 해체분석기 #1: Git은 어떻게 파일을 저장할까?"
 date: 2026-02-03
 summary: ".git 폴더를 열어보며 Git의 Object Model을 이해합니다"
 tags: ["git", "해체분석기"]
 categories: ["개발"]
-series: ["해체분석기"]
+series: ["Git 해체분석기"]
+series_order: 1
 draft: false
 mermaid: true
 ---
