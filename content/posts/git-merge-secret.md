@@ -200,7 +200,7 @@ flowchart LR
 
 ---
 
-## Merge Base 찾기: 공통 조상의 비밀
+## Merge Base: 공통 조상 찾기
 
 3-way merge의 핵심은 **merge base**를 찾는 것이다.
 
@@ -209,45 +209,9 @@ $ git merge-base main feature
 b2c3d4e  # commit B
 ```
 
-왜 B인가? 둘 다 B로부터 갈라져 나왔기 때문.
+> 💡 merge-base가 왜 필요한지, Git 역사에서 어떻게 등장했는지는 [Git 해체분석기 #4: 첫 2주](/posts/git-evolution-first-two-weeks/)의 Day 11에서 자세히 다뤘다.
 
-### 알고리즘: LCA (Lowest Common Ancestor)
-
-Git의 커밋 히스토리는 **DAG (Directed Acyclic Graph)**다. 방향이 있고(부모 → 자식), 순환이 없는 그래프.
-
-```
-    A
-    |
-    B  ← merge base
-   / \
-  C   D
-```
-
-LCA 알고리즘:
-1. 두 커밋에서 동시에 부모 방향으로 탐색
-2. 양쪽에서 도달 가능한 공통 조상 찾기
-3. 다른 공통 조상의 조상이 **아닌** 가장 가까운 조상 선택
-
-### 복잡한 경우
-
-```
-    A
-   / \
-  B   C
-  |\ /|
-  | X |
-  |/ \|
-  D   E
-   \ /
-    F
-```
-
-이런 경우 merge base가 **여러 개**일 수 있다. Git은 이럴 때 **recursive strategy**를 쓴다:
-
-1. 여러 merge base를 먼저 병합 (가상의 base 생성)
-2. 그 가상 base를 사용해 최종 병합
-
-이래서 "recursive"다.
+merge base가 **여러 개**인 복잡한 경우, Git은 **recursive strategy**를 쓴다. 여러 base를 먼저 병합해 가상의 base를 만들고, 그걸로 최종 병합한다. 이래서 "recursive"다.
 
 ---
 
