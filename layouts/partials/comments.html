@@ -7,7 +7,7 @@
   <div id="auth-section" class="auth-section">
     <div id="logged-out">
       <p>비밀댓글을 작성하려면 GitHub로 로그인하세요.</p>
-      <button id="github-login" onclick="loginWithGithub()">
+      <button id="github-login-btn" type="button">
         <svg height="20" width="20" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px;">
           <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
         </svg>
@@ -18,7 +18,7 @@
       <p>
         <img id="user-avatar" src="" alt="" style="width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; margin-right: 8px;" />
         <span id="user-name"></span>님으로 로그인됨
-        <button onclick="logout()" style="margin-left: 1rem; font-size: 0.85rem;">로그아웃</button>
+        <button id="logout-btn" type="button" style="margin-left: 1rem; font-size: 0.85rem;">로그아웃</button>
       </p>
     </div>
   </div>
@@ -27,7 +27,7 @@
   <div id="comment-form" class="comment-form" style="display: none;">
     <h4>🔒 비밀댓글 작성</h4>
     <textarea id="comment-body" placeholder="비밀댓글 내용... (관리자만 볼 수 있어요)" rows="3"></textarea>
-    <button id="submit-comment" onclick="submitComment()">비밀댓글 등록</button>
+    <button id="submit-comment-btn" type="button">비밀댓글 등록</button>
     <p id="comment-status"></p>
   </div>
 
@@ -76,7 +76,7 @@
   margin-bottom: 1.5rem;
 }
 
-#github-login {
+#github-login-btn {
   background: #24292e;
   color: white;
   border: none;
@@ -88,7 +88,7 @@
   align-items: center;
 }
 
-#github-login:hover {
+#github-login-btn:hover {
   background: #2f363d;
 }
 
@@ -116,7 +116,7 @@
   min-height: 80px;
 }
 
-#submit-comment {
+#submit-comment-btn {
   background: #ffd43b;
   color: #1a1a1a;
   border: none;
@@ -126,7 +126,7 @@
   font-weight: 500;
 }
 
-#submit-comment:hover {
+#submit-comment-btn:hover {
   background: #fab005;
 }
 
@@ -163,82 +163,73 @@
 }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// 변수 선언
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
 const SUPABASE_URL = 'https://mltfxorclsszacjwveca.supabase.co';
 const SUPABASE_ANON_KEY = '{{ .Site.Params.supabase.anonKey }}';
 const POST_SLUG = '{{ .RelPermalink }}';
 const ADMIN_GITHUB = ['hiddenpunch'];
 
-let supabaseClient = null;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 let currentUser = null;
 
-// SDK 로드 후 초기화
-function initSupabase() {
-  if (window.supabase && !supabaseClient) {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    checkSession();
-  }
-}
-
-// SDK 로드 대기
-if (window.supabase) {
-  initSupabase();
-} else {
-  // SDK 로드 완료 대기
-  const checkSDK = setInterval(() => {
-    if (window.supabase) {
-      clearInterval(checkSDK);
-      initSupabase();
-    }
-  }, 100);
-}
-
-// 세션 확인
-async function checkSession() {
-  if (!supabaseClient) return;
+// 초기화
+async function init() {
+  console.log('Initializing comments...');
   
-  // URL 해시에서 토큰 처리 (OAuth 콜백)
-  const hashParams = new URLSearchParams(window.location.hash.substring(1));
-  if (hashParams.get('access_token')) {
-    history.replaceState(null, '', window.location.pathname);
-  }
+  // 세션 확인
+  const { data: { session }, error } = await supabase.auth.getSession();
+  console.log('Session:', session, 'Error:', error);
   
-  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
     currentUser = session.user;
+    console.log('User:', currentUser);
     showLoggedIn();
   } else {
     showLoggedOut();
   }
   
+  // Auth 상태 변경 감지
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log('Auth state changed:', event, session);
+    if (session) {
+      currentUser = session.user;
+      showLoggedIn();
+    } else {
+      currentUser = null;
+      showLoggedOut();
+    }
+    loadPrivateComments();
+  });
+  
   loadPrivateComments();
 }
 
-async function loginWithGithub() {
-  if (!supabaseClient) {
-    alert('로딩 중입니다. 잠시 후 다시 시도해주세요.');
-    return;
-  }
-  const { error } = await supabaseClient.auth.signInWithOAuth({
+// 버튼 이벤트 연결
+document.getElementById('github-login-btn').addEventListener('click', async () => {
+  console.log('Login clicked');
+  const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: {
-      redirectTo: window.location.href
+      redirectTo: window.location.origin + window.location.pathname
     }
   });
   if (error) {
     console.error('Login error:', error);
     alert('로그인 실패: ' + error.message);
   }
-}
+});
 
-async function logout() {
-  await supabaseClient.auth.signOut();
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
   currentUser = null;
   showLoggedOut();
   document.getElementById('private-comments-list').style.display = 'none';
-}
+});
+
+document.getElementById('submit-comment-btn').addEventListener('click', submitComment);
 
 function showLoggedIn() {
   document.getElementById('logged-out').style.display = 'none';
@@ -274,7 +265,7 @@ async function submitComment() {
 
   const meta = currentUser.user_metadata;
   
-  const { error } = await supabaseClient.from('blog_comments').insert({
+  const { error } = await supabase.from('blog_comments').insert({
     post_slug: POST_SLUG,
     author_name: meta.user_name || meta.full_name || 'Anonymous',
     author_email: currentUser.email,
@@ -295,7 +286,6 @@ async function submitComment() {
 }
 
 async function loadPrivateComments() {
-  // 관리자만 비밀댓글 볼 수 있음
   const isAdmin = currentUser && ADMIN_GITHUB.includes(currentUser.user_metadata?.user_name);
   
   if (!isAdmin) return;
@@ -336,4 +326,7 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+
+// 시작
+init();
 </script>
