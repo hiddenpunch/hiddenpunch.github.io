@@ -30,7 +30,7 @@ pygmentsUseClasses = true
   UseHugoToc = true
   disableSpecial1stPost = false
   disableScrollToTop = false
-  comments = false
+  comments = true
   hidemeta = false
   hideSummary = false
   showtoc = true
@@ -53,6 +53,18 @@ pygmentsUseClasses = true
   URL = "https://github.com/hiddenpunch/hiddenpunch.github.io/edit/main/content"
   Text = "수정 제안"
   appendFilePath = true
+
+[params.giscus]
+  repo = "hiddenpunch/hiddenpunch.github.io"
+  repoId = ""  # TODO: giscus.app에서 확인 필요
+  category = "Comments"
+  categoryId = ""  # TODO: giscus.app에서 확인 필요
+  mapping = "pathname"
+  reactionsEnabled = "1"
+  emitMetadata = "0"
+  inputPosition = "bottom"
+  theme = "preferred_color_scheme"
+  lang = "ko"
 
 [params.fuseOpts]
   isCaseSensitive = false
