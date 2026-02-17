@@ -56,10 +56,11 @@ pygmentsUseClasses = true
 
 [params.giscus]
   repo = "hiddenpunch/hiddenpunch.github.io"
-  repoId = ""  # TODO: giscus.app에서 확인 필요
+  repoId = "R_kgDORHYCPw"
   category = "Comments"
-  categoryId = ""  # TODO: giscus.app에서 확인 필요
+  categoryId = "DIC_kwDORHYCP84C2nhd"
   mapping = "pathname"
+  strict = "1"
   reactionsEnabled = "1"
   emitMetadata = "0"
   inputPosition = "bottom"
