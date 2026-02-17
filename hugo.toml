@@ -54,6 +54,9 @@ pygmentsUseClasses = true
   Text = "수정 제안"
   appendFilePath = true
 
+[params.supabase]
+  anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sdGZ4b3JjbHNzemFjand2ZWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MDczNjYsImV4cCI6MjA4NTk4MzM2Nn0.1JqoqA_CKkdxvqUiB9wtQStMshSSQ5LbwQrC78-Ewt4"
+
 [params.giscus]
   repo = "hiddenpunch/hiddenpunch.github.io"
   repoId = "R_kgDORHYCPw"

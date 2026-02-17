@@ -1,17 +1,241 @@
-{{- if .Site.Params.giscus.repo -}}
-<script src="https://giscus.app/client.js"
-        data-repo="{{ .Site.Params.giscus.repo }}"
-        data-repo-id="{{ .Site.Params.giscus.repoId }}"
-        data-category="{{ .Site.Params.giscus.category }}"
-        data-category-id="{{ .Site.Params.giscus.categoryId }}"
-        data-mapping="{{ default "pathname" .Site.Params.giscus.mapping }}"
-        data-strict="{{ default "0" .Site.Params.giscus.strict }}"
-        data-reactions-enabled="{{ default "1" .Site.Params.giscus.reactionsEnabled }}"
-        data-emit-metadata="{{ default "0" .Site.Params.giscus.emitMetadata }}"
-        data-input-position="{{ default "bottom" .Site.Params.giscus.inputPosition }}"
-        data-theme="{{ default "preferred_color_scheme" .Site.Params.giscus.theme }}"
-        data-lang="{{ default "ko" .Site.Params.giscus.lang }}"
-        crossorigin="anonymous"
-        async>
+{{- /* 비밀댓글 시스템 (Supabase) + 공개댓글 (giscus) */ -}}
+
+<div id="comments-section" class="comments-container">
+  <h3>💬 댓글</h3>
+  
+  <!-- 비밀댓글 작성 폼 -->
+  <div id="private-comment-form" class="comment-form">
+    <h4>댓글 작성</h4>
+    <input type="text" id="comment-author" placeholder="이름 (선택)" />
+    <textarea id="comment-body" placeholder="댓글 내용..." rows="3"></textarea>
+    <div class="comment-options">
+      <label>
+        <input type="checkbox" id="comment-private" />
+        🔒 비밀댓글 (관리자만 볼 수 있어요)
+      </label>
+    </div>
+    <button id="submit-comment" onclick="submitComment()">댓글 등록</button>
+    <p id="comment-status"></p>
+  </div>
+
+  <!-- 비밀댓글 목록 (Supabase) -->
+  <div id="private-comments-list">
+    <h4>🔒 비밀댓글</h4>
+    <div id="private-comments"></div>
+  </div>
+
+  <hr style="margin: 2rem 0;" />
+
+  <!-- 공개댓글 (giscus) -->
+  <div id="public-comments">
+    <h4>💬 공개댓글</h4>
+    {{- if .Site.Params.giscus.repo -}}
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ .Site.Params.giscus.repo }}"
+            data-repo-id="{{ .Site.Params.giscus.repoId }}"
+            data-category="{{ .Site.Params.giscus.category }}"
+            data-category-id="{{ .Site.Params.giscus.categoryId }}"
+            data-mapping="{{ default "pathname" .Site.Params.giscus.mapping }}"
+            data-strict="{{ default "0" .Site.Params.giscus.strict }}"
+            data-reactions-enabled="{{ default "1" .Site.Params.giscus.reactionsEnabled }}"
+            data-emit-metadata="{{ default "0" .Site.Params.giscus.emitMetadata }}"
+            data-input-position="{{ default "bottom" .Site.Params.giscus.inputPosition }}"
+            data-theme="{{ default "preferred_color_scheme" .Site.Params.giscus.theme }}"
+            data-lang="{{ default "ko" .Site.Params.giscus.lang }}"
+            crossorigin="anonymous"
+            async>
+    </script>
+    {{- end -}}
+  </div>
+</div>
+
+<style>
+.comments-container {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.comment-form {
+  background: var(--code-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.comment-form h4 {
+  margin-top: 0;
+}
+
+.comment-form input[type="text"],
+.comment-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--theme);
+  color: var(--primary);
+  font-family: inherit;
+}
+
+.comment-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.comment-options {
+  margin-bottom: 1rem;
+}
+
+.comment-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+#submit-comment {
+  background: var(--primary);
+  color: var(--theme);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#submit-comment:hover {
+  opacity: 0.9;
+}
+
+#comment-status {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.private-comment {
+  background: var(--code-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 3px solid #ffd43b;
+}
+
+.private-comment .comment-meta {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.private-comment .comment-body {
+  line-height: 1.6;
+}
+
+#private-comments-list {
+  display: none;
+}
+
+#private-comments-list.has-comments {
+  display: block;
+}
+</style>
+
+<script>
+const SUPABASE_URL = 'https://mltfxorclsszacjwveca.supabase.co';
+const SUPABASE_ANON_KEY = '{{ .Site.Params.supabase.anonKey | default "" }}';
+const POST_SLUG = '{{ .RelPermalink }}';
+const IS_ADMIN = localStorage.getItem('blog_admin') === 'true';
+
+async function submitComment() {
+  const author = document.getElementById('comment-author').value || 'Anonymous';
+  const body = document.getElementById('comment-body').value;
+  const isPrivate = document.getElementById('comment-private').checked;
+  const status = document.getElementById('comment-status');
+
+  if (!body.trim()) {
+    status.textContent = '❌ 댓글 내용을 입력해주세요.';
+    return;
+  }
+
+  if (!isPrivate) {
+    status.textContent = '💡 공개댓글은 아래 giscus를 이용해주세요!';
+    return;
+  }
+
+  status.textContent = '⏳ 등록 중...';
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/blog_comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        post_slug: POST_SLUG,
+        author_name: author,
+        body: body,
+        is_private: isPrivate
+      })
+    });
+
+    if (response.ok) {
+      status.textContent = '✅ 비밀댓글이 등록되었습니다! 관리자만 볼 수 있어요.';
+      document.getElementById('comment-body').value = '';
+      document.getElementById('comment-private').checked = false;
+      if (IS_ADMIN) loadPrivateComments();
+    } else {
+      throw new Error('Failed to submit');
+    }
+  } catch (err) {
+    status.textContent = '❌ 등록 실패. 다시 시도해주세요.';
+    console.error(err);
+  }
+}
+
+async function loadPrivateComments() {
+  if (!IS_ADMIN || !SUPABASE_ANON_KEY) return;
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/blog_comments?post_slug=eq.${encodeURIComponent(POST_SLUG)}&is_private=eq.true&order=created_at.desc`,
+      {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+
+    const comments = await response.json();
+    const container = document.getElementById('private-comments');
+    const list = document.getElementById('private-comments-list');
+
+    if (comments.length > 0) {
+      list.classList.add('has-comments');
+      container.innerHTML = comments.map(c => `
+        <div class="private-comment">
+          <div class="comment-meta">
+            <strong>${escapeHtml(c.author_name)}</strong> · ${new Date(c.created_at).toLocaleDateString('ko-KR')}
+          </div>
+          <div class="comment-body">${escapeHtml(c.body)}</div>
+        </div>
+      `).join('');
+    }
+  } catch (err) {
+    console.error('Failed to load private comments:', err);
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// 페이지 로드 시 비밀댓글 불러오기 (관리자만)
+document.addEventListener('DOMContentLoaded', loadPrivateComments);
 </script>
-{{- end -}}
