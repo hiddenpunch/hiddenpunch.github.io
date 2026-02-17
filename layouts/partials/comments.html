@@ -165,25 +165,47 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// 변수 선언
 const SUPABASE_URL = 'https://mltfxorclsszacjwveca.supabase.co';
 const SUPABASE_ANON_KEY = '{{ .Site.Params.supabase.anonKey }}';
 const POST_SLUG = '{{ .RelPermalink }}';
 const ADMIN_GITHUB = ['hiddenpunch'];
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+let supabaseClient = null;
 let currentUser = null;
 
-// 페이지 로드 시 세션 확인
-document.addEventListener('DOMContentLoaded', async () => {
+// SDK 로드 후 초기화
+function initSupabase() {
+  if (window.supabase && !supabaseClient) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    checkSession();
+  }
+}
+
+// SDK 로드 대기
+if (window.supabase) {
+  initSupabase();
+} else {
+  // SDK 로드 완료 대기
+  const checkSDK = setInterval(() => {
+    if (window.supabase) {
+      clearInterval(checkSDK);
+      initSupabase();
+    }
+  }, 100);
+}
+
+// 세션 확인
+async function checkSession() {
+  if (!supabaseClient) return;
+  
   // URL 해시에서 토큰 처리 (OAuth 콜백)
   const hashParams = new URLSearchParams(window.location.hash.substring(1));
   if (hashParams.get('access_token')) {
-    // Supabase가 자동으로 세션 설정함
     history.replaceState(null, '', window.location.pathname);
   }
   
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session) {
     currentUser = session.user;
     showLoggedIn();
@@ -192,10 +214,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   
   loadPrivateComments();
-});
+}
 
 async function loginWithGithub() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  if (!supabaseClient) {
+    alert('로딩 중입니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+  const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'github',
     options: {
       redirectTo: window.location.href
@@ -208,7 +234,7 @@ async function loginWithGithub() {
 }
 
 async function logout() {
-  await supabase.auth.signOut();
+  await supabaseClient.auth.signOut();
   currentUser = null;
   showLoggedOut();
   document.getElementById('private-comments-list').style.display = 'none';
@@ -248,7 +274,7 @@ async function submitComment() {
 
   const meta = currentUser.user_metadata;
   
-  const { error } = await supabase.from('blog_comments').insert({
+  const { error } = await supabaseClient.from('blog_comments').insert({
     post_slug: POST_SLUG,
     author_name: meta.user_name || meta.full_name || 'Anonymous',
     author_email: currentUser.email,
