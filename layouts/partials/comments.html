@@ -1,4 +1,4 @@
-{{- /* 비밀댓글 (myadmin + NextAuth) + 공개댓글 (giscus) */ -}}
+{{- /* 비밀댓글 (Supabase Auth + DB) + 공개댓글 (giscus) */ -}}
 
 <div id="comments-section" class="comments-container">
   <h3>💬 댓글</h3>
@@ -6,7 +6,7 @@
   <!-- 로그인 상태 표시 -->
   <div id="auth-section" class="auth-section">
     <div id="logged-out">
-      <p>비밀댓글을 작성하려면 로그인하세요.</p>
+      <p>비밀댓글을 작성하려면 GitHub로 로그인하세요.</p>
       <button id="github-login" onclick="loginWithGithub()">
         <svg height="20" width="20" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 8px;">
           <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
@@ -163,45 +163,55 @@
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const API_BASE = 'https://myadmin-khaki.vercel.app';
+const SUPABASE_URL = 'https://mltfxorclsszacjwveca.supabase.co';
+const SUPABASE_ANON_KEY = '{{ .Site.Params.supabase.anonKey }}';
 const POST_SLUG = '{{ .RelPermalink }}';
+const ADMIN_GITHUB = ['hiddenpunch'];
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 
 // 페이지 로드 시 세션 확인
 document.addEventListener('DOMContentLoaded', async () => {
-  await checkSession();
-  await loadPrivateComments();
+  // URL 해시에서 토큰 처리 (OAuth 콜백)
+  const hashParams = new URLSearchParams(window.location.hash.substring(1));
+  if (hashParams.get('access_token')) {
+    // Supabase가 자동으로 세션 설정함
+    history.replaceState(null, '', window.location.pathname);
+  }
+  
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    showLoggedIn();
+  } else {
+    showLoggedOut();
+  }
+  
+  loadPrivateComments();
 });
 
-async function checkSession() {
-  try {
-    const res = await fetch(`${API_BASE}/api/auth/session`, {
-      credentials: 'include'
-    });
-    const session = await res.json();
-    
-    if (session?.user) {
-      currentUser = session.user;
-      showLoggedIn();
-    } else {
-      showLoggedOut();
+async function loginWithGithub() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: {
+      redirectTo: window.location.href
     }
-  } catch (err) {
-    console.error('Session check failed:', err);
-    showLoggedOut();
+  });
+  if (error) {
+    console.error('Login error:', error);
+    alert('로그인 실패: ' + error.message);
   }
 }
 
-function loginWithGithub() {
-  // myadmin NextAuth GitHub 로그인으로 리다이렉트
-  const callbackUrl = encodeURIComponent(window.location.href);
-  window.location.href = `${API_BASE}/api/auth/signin/github?callbackUrl=${callbackUrl}`;
-}
-
-function logout() {
-  window.location.href = `${API_BASE}/api/auth/signout?callbackUrl=${encodeURIComponent(window.location.href)}`;
+async function logout() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  showLoggedOut();
+  document.getElementById('private-comments-list').style.display = 'none';
 }
 
 function showLoggedIn() {
@@ -209,10 +219,9 @@ function showLoggedIn() {
   document.getElementById('logged-in').style.display = 'block';
   document.getElementById('comment-form').style.display = 'block';
   
-  document.getElementById('user-name').textContent = currentUser.name || currentUser.email || 'User';
-  if (currentUser.image) {
-    document.getElementById('user-avatar').src = currentUser.image;
-  }
+  const meta = currentUser.user_metadata;
+  document.getElementById('user-name').textContent = meta.user_name || meta.full_name || 'User';
+  document.getElementById('user-avatar').src = meta.avatar_url || '';
 }
 
 function showLoggedOut() {
@@ -230,72 +239,69 @@ async function submitComment() {
     return;
   }
 
+  if (!currentUser) {
+    status.textContent = '❌ 로그인이 필요합니다.';
+    return;
+  }
+
   status.textContent = '⏳ 등록 중...';
 
-  try {
-    const res = await fetch(`${API_BASE}/api/comments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        post_slug: POST_SLUG,
-        content: body,
-        is_private: true
-      })
-    });
+  const meta = currentUser.user_metadata;
+  
+  const { error } = await supabase.from('blog_comments').insert({
+    post_slug: POST_SLUG,
+    author_name: meta.user_name || meta.full_name || 'Anonymous',
+    author_email: currentUser.email,
+    author_avatar: meta.avatar_url,
+    author_github: meta.user_name,
+    body: body,
+    is_private: true
+  });
 
-    if (res.ok) {
-      status.textContent = '✅ 비밀댓글이 등록되었습니다!';
-      document.getElementById('comment-body').value = '';
-      loadPrivateComments();
-    } else {
-      const err = await res.json();
-      status.textContent = '❌ ' + (err.error || '등록 실패');
-    }
-  } catch (err) {
-    status.textContent = '❌ 네트워크 오류';
-    console.error(err);
+  if (!error) {
+    status.textContent = '✅ 비밀댓글이 등록되었습니다!';
+    document.getElementById('comment-body').value = '';
+    loadPrivateComments();
+  } else {
+    status.textContent = '❌ 등록 실패: ' + error.message;
+    console.error(error);
   }
 }
 
 async function loadPrivateComments() {
   // 관리자만 비밀댓글 볼 수 있음
-  const isAdmin = currentUser && (
-    currentUser.email === 'gideok.kim@dalpha.so' ||
-    currentUser.login === 'hiddenpunch' ||
-    localStorage.getItem('blog_admin') === 'true'
-  );
+  const isAdmin = currentUser && ADMIN_GITHUB.includes(currentUser.user_metadata?.user_name);
   
   if (!isAdmin) return;
 
-  try {
-    const res = await fetch(
-      `${API_BASE}/api/comments?post_slug=${encodeURIComponent(POST_SLUG)}&include_private=true`,
-      { credentials: 'include' }
-    );
-    const comments = await res.json();
+  const { data: comments, error } = await supabase
+    .from('blog_comments')
+    .select('*')
+    .eq('post_slug', POST_SLUG)
+    .eq('is_private', true)
+    .order('created_at', { ascending: false });
 
-    const container = document.getElementById('private-comments');
-    const list = document.getElementById('private-comments-list');
+  if (error) {
+    console.error('Failed to load comments:', error);
+    return;
+  }
 
-    const privateComments = comments.filter(c => c.is_private);
-    
-    if (privateComments.length > 0) {
-      list.style.display = 'block';
-      container.innerHTML = privateComments.map(c => `
-        <div class="private-comment">
-          <div class="comment-meta">
-            ${c.author_avatar ? `<img src="${c.author_avatar}" alt="" />` : ''}
-            <strong>${escapeHtml(c.author_name)}</strong>
-            ${c.author_github ? `<a href="https://github.com/${c.author_github}" target="_blank">@${c.author_github}</a>` : ''}
-            · ${new Date(c.created_at).toLocaleDateString('ko-KR')}
-          </div>
-          <div class="comment-body">${escapeHtml(c.body)}</div>
+  const container = document.getElementById('private-comments');
+  const list = document.getElementById('private-comments-list');
+
+  if (comments && comments.length > 0) {
+    list.style.display = 'block';
+    container.innerHTML = comments.map(c => `
+      <div class="private-comment">
+        <div class="comment-meta">
+          ${c.author_avatar ? `<img src="${c.author_avatar}" alt="" />` : ''}
+          <strong>${escapeHtml(c.author_name)}</strong>
+          ${c.author_github ? `<a href="https://github.com/${c.author_github}" target="_blank" style="color: var(--secondary);">@${c.author_github}</a>` : ''}
+          · ${new Date(c.created_at).toLocaleDateString('ko-KR')}
         </div>
-      `).join('');
-    }
-  } catch (err) {
-    console.error('Failed to load comments:', err);
+        <div class="comment-body">${escapeHtml(c.body)}</div>
+      </div>
+    `).join('');
   }
 }
 
