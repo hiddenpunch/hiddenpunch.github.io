@@ -386,8 +386,6 @@ $ cat .git/logs/HEAD  # 모든 이동이 기록됨
 
 ---
 
-## 다음 편 예고
-
 > **해체분석기 #11: Git Stash - 임시 저장의 비밀**
 >
 > - Stash는 어디에 저장되나? (refs/stash의 정체)

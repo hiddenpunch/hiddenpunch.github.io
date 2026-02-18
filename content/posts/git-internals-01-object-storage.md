@@ -347,8 +347,6 @@ flowchart LR
 
 ---
 
-## 다음 편 예고
-
 > **해체분석기 #2: Git은 어떻게 변경사항을 추적할까?**
 >
 > - staging area(index)의 정체

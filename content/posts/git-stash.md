@@ -458,8 +458,6 @@ flowchart LR
 
 ---
 
-## 다음 편 예고
-
 > **해체분석기 #13: Git Worktree - 한 저장소, 여러 작업 공간**
 >
 > - worktree가 .git을 공유하는 방식

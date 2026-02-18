@@ -449,8 +449,6 @@ flowchart TB
 
 ---
 
-## 다음 편 예고
-
 > **해체분석기 #17: Git Submodule - 저장소 안의 저장소**
 >
 > - submodule이 `.gitmodules`와 `.git/modules/`를 관리하는 방식

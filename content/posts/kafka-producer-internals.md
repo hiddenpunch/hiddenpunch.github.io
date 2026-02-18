@@ -619,7 +619,6 @@ Kafka Producer는 **"단순한 API 뒤에 복잡한 최적화"**의 교과서다
 
 ## 다음 예고: Kafka 해체분석기 #6
 
-다음 편에서는 **Consumer Group의 비밀 - Rebalancing과 Partition Assignment**를 다룰 예정입니다.
 
 - Coordinator의 역할
 - Eager vs Cooperative Rebalancing

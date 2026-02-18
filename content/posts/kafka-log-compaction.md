@@ -752,8 +752,6 @@ Compaction은 이 모든 걸 가능하게 하는 핵심 메커니즘이다.
 
 ---
 
-## 다음 편 예고
-
 **Kafka 해체분석기 #8: "Exactly-Once의 비밀 - Idempotent Producer와 Transaction"**
 - `enable.idempotence=true`의 내부 동작
 - Producer ID와 Sequence Number

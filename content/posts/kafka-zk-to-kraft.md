@@ -597,7 +597,6 @@ ZooKeeper여, 20년간 고마웠다. 이제는 Kafka가 스스로 걸어갈 시�
 
 ## 다음 예고: Kafka 해체분석기 #7
 
-다음 편에서는 **Tiered Storage - S3로 무한 확장하기**를 다룰 예정입니다.
 
 - 디스크 병목 해결 (Hot vs Cold Data)
 - Object Storage 통합 (S3, GCS, Azure Blob)

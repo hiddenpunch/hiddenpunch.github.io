@@ -547,7 +547,6 @@ Kafka의 Offset 관리는 단순해 보이지만, 그 속엔 분산 시스템의
 
 ## 다음 예고: Kafka 해체분석기 #5
 
-다음 편에서는 **Producer Internals - 메시지는 어떻게 브로커에 도달하나**를 다룰 예정입니다.
 
 - Partitioner의 선택 알고리즘
 - RecordAccumulator의 배치 최적화
