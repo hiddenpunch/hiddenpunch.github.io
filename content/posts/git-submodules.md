@@ -1,13 +1,13 @@
 ---
-title: "Git 해체분석기 #15: Submodules - 저장소 안의 저장소"
+title: "Git 해체분석기 #24: Submodules - 저장소 안의 저장소"
 date: 2026-02-17T18:00:00+09:00
 draft: false
 summary: "git clone 했더니 폴더가 비어 있다. --recurse-submodules를 빠뜨린 것이다. Submodule이 내부적으로 무엇인지, 왜 이렇게 동작하는지를 해체한다."
 tags: ["git", "해체분석기", "submodule", "subtree", "monorepo"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 15
-weight: -15
+series_order: 24
+weight: -24
 mermaid: true
 toc: true
 ---

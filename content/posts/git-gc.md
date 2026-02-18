@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #20: GC - 가비지 컬렉션의 비밀"
+title: "Git 해체분석기 #11: GC - 가비지 컬렉션의 비밀"
 date: 2026-02-18T11:03:32+09:00
 draft: false
 tags: ["git", "internals", "gc", "pack-files", "objects", "performance"]
 series: ["Git 해체분석기"]
-series_order: 20
-weight: -20
+series_order: 11
+weight: -11
 ---
 
 ## 들어가며

@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #22: Notes - 커밋을 건드리지 않고 메모 붙이기"
+title: "Git 해체분석기 #14: Notes - 커밋을 건드리지 않고 메모 붙이기"
 date: 2026-02-18T11:03:14+09:00
 summary: "git notes의 내부 구조를 완전 해부 — refs/notes/commits가 어떻게 동작하는지, 커밋 해시를 바꾸지 않고 메타데이터를 첨부하는 원리, 5가지 merge 전략, CI/CD 빌드 정보 첨부, 그리고 GitHub이 notes를 보여주지 않는 이유까지"
 tags: ["git", "해체분석기", "notes", "internals", "ci-cd"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 22
-weight: -22
+series_order: 14
+weight: -14
 draft: false
 mermaid: true
 ---

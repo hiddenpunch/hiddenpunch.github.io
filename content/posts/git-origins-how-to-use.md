@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #3: 초창기 Git은 어떻게 사용했을까?"
+title: "Git 해체분석기 #2: 초창기 Git은 어떻게 사용했을까?"
 date: 2026-02-05T21:15:00+09:00
 summary: "2005년 첫 버전 Git의 실제 사용법. init-db부터 commit-tree까지, 수동으로 버전 관리하기"
 tags: ["git", "해체분석기", "history", "linus-torvalds"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 3
-weight: -3
+series_order: 2
+weight: -2
 draft: false
 mermaid: true
 ---

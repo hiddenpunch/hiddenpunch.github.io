@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #17: Diff의 비밀 - 두 파일의 차이를 어떻게 찾나"
+title: "Git 해체분석기 #5: Diff의 비밀 - 두 파일의 차이를 어떻게 찾나"
 date: 2026-02-18T01:00:00+09:00
 draft: false
 tags: ["git", "해체분석기", "diff", "myers", "algorithm", "lcs"]
 series: ["Git 해체분석기"]
-series_order: 17
-weight: -17
+series_order: 5
+weight: -5
 mermaid: true
 toc: true
 description: "git diff는 어떻게 두 파일의 차이를 찾는가? 1974년 Hunt-McIlroy부터 1986년 Myers 알고리즘까지, LCS와 diff의 수학적 원리를 해체분석합니다."

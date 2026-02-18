@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #6: Remote는 어떻게 탄생했나"
+title: "Git 해체분석기 #9: Remote는 어떻게 탄생했나"
 date: 2026-02-14T18:30:00+09:00
 draft: false
 tags: ["git", "해체분석기", "remote", "fetch", "push", "origin"]
 series: ["Git 해체분석기"]
-series_order: 6
-weight: -6
+series_order: 9
+weight: -9
 mermaid: true
 toc: true
 ---

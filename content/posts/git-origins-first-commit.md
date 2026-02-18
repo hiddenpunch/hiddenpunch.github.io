@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #2: Git의 탄생 - 첫 커밋을 열어보다"
+title: "Git 해체분석기 #1: Git의 탄생 - 첫 커밋을 열어보다"
 date: 2026-02-05T20:35:00+09:00
 summary: "2005년 4월, Linus Torvalds는 10일 만에 Git을 만들었다. 왜 만들었고, 첫 버전은 어떻게 생겼을까?"
 tags: ["git", "해체분석기", "history", "linus-torvalds"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 2
-weight: -2
+series_order: 1
+weight: -1
 draft: false
 mermaid: true
 ---
