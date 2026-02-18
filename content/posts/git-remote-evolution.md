@@ -10,18 +10,6 @@ mermaid: true
 toc: true
 ---
 
-## 이전 글 요약
-
-[지난 글](/posts/git-branches-birth/)에서 Branch의 탄생을 봤다.
-
-Branch는 그냥 41바이트짜리 파일이었다. `.git/refs/heads/master`에 commit hash만 저장.
-
-그런데 Branch가 생기면 자연스러운 질문이 따라온다:
-
-**"이 Branch를 다른 사람과 어떻게 공유하지?"**
-
----
-
 ## Git 이전: Patches and Tarballs
 
 Git이 왜 만들어졌는지 이해하려면, 그 전에 Linux 커널 개발자들이 어떻게 협업했는지 알아야 한다.

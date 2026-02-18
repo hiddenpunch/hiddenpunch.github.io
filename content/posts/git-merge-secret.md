@@ -10,23 +10,6 @@ mermaid: true
 toc: true
 ---
 
-## 이전 글 요약
-
-[지난 글](/posts/git-branches-birth/)에서 Branch의 탄생을 봤다.
-
-Branch는 **41바이트 텍스트 파일**이었다. commit hash를 담은 이름표.
-
-```bash
-$ cat .git/refs/heads/feature
-d1f4e8b7c9a0f2e3d4c5b6a7890123456789abcd
-```
-
-이제 브랜치를 만들 수 있다. 하지만 한 가지 문제가 남았다:
-
-**"어떻게 합치지?"**
-
----
-
 ## 문제: 두 개의 역사
 
 `main`에서 작업하고, `feature`에서도 작업했다.

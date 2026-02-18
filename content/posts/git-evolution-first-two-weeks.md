@@ -11,7 +11,6 @@ draft: false
 mermaid: true
 ---
 
-> 이전 글: [Git의 탄생](/posts/git-origins-first-commit/), [초창기 사용법](/posts/git-origins-how-to-use/)
 
 ## 들어가며
 
@@ -303,5 +302,3 @@ Git은 2주 만에 **파일 저장 도구**에서 **분산 버전 관리 시스�
 ## 참고 자료
 
 - [Git 저장소 커밋 히스토리](https://github.com/git/git/commits/master?after=e83c5163316f89bfbde7d9ab23ca2e25604af290)
-- [이전 글: Git의 탄생](/posts/git-origins-first-commit/)
-- [이전 글: 초창기 사용법](/posts/git-origins-how-to-use/)

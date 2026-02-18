@@ -10,16 +10,6 @@ mermaid: true
 toc: true
 ---
 
-## 이전 글 요약
-
-[지난 글](/posts/git-evolution-first-two-weeks/)에서 Git의 첫 2주를 살펴봤다.
-
-Day 1에는 저장만, Day 12에는 머지까지. 하지만 한 가지 빠진 게 있었다.
-
-**Branch가 없었다.**
-
----
-
 ## 문제: Hash를 외워야 했다
 
 첫 커밋의 Git에는 branch 개념이 없었다. commit을 만들면 40자 hash가 나온다:

@@ -10,18 +10,6 @@ mermaid: true
 toc: true
 ---
 
-## 이전 글 요약
-
-[지난 글](/posts/git-remote-evolution/)에서 Remote의 탄생을 봤다.
-
-fetch, push로 object를 주고받을 수 있게 됐다. 하지만 한 가지 문제가 있었다:
-
-**"object가 너무 많아지면 어떡하지?"**
-
-Linux 커널 저장소를 생각해보자. 20년간 수백만 개의 commit, 수천만 개의 파일 버전. 이걸 전부 개별 파일로 저장하면?
-
----
-
 ## Loose Object의 한계
 
 Git은 처음에 모든 object를 개별 파일로 저장했다.

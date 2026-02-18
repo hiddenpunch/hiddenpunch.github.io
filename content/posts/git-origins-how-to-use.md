@@ -11,7 +11,6 @@ draft: false
 mermaid: true
 ---
 
-> 이전 글 [Git의 탄생](/posts/git-origins-first-commit/)에서 첫 커밋의 구조를 살펴봤다.
 > 이번엔 실제로 **어떻게 사용하는지** 알아보자.
 
 ## 들어가며
@@ -472,4 +471,3 @@ echo "test" > test.txt
 ## 참고 자료
 
 - [Git 첫 커밋](https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290)
-- [이전 글: Git의 탄생](/posts/git-origins-first-commit/)
