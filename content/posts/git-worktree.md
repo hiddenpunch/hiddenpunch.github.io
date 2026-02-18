@@ -449,12 +449,6 @@ flowchart TB
 
 ---
 
-> **해체분석기 #17: Git Submodule - 저장소 안의 저장소**
->
-> - submodule이 `.gitmodules`와 `.git/modules/`를 관리하는 방식
-> - commit 객체에 submodule 정보가 어떻게 담기는지
-> - subtree와의 차이
-
 ---
 
 ## 참고 자료

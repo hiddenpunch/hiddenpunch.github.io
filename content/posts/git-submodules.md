@@ -529,12 +529,6 @@ git commit -m "chore: add git as submodule"
 
 ---
 
-> **해체분석기 #16: Worktrees - 하나의 저장소, 여러 작업공간**
->
-> - `git worktree add`의 내부 구조
-> - `.git/worktrees/`에 저장되는 것
-> - submodule과 worktree가 만날 때
-
 ---
 
 ## 참고 자료

@@ -344,12 +344,6 @@ flowchart LR
 
 ---
 
-> **해체분석기 #3: LangGraph 깊게 파보기**
->
-> - StateGraph 실제 구현 분석
-> - 왜 Graph 구조인가?
-> - Durable execution은 어떻게 동작하나?
-
 ---
 
 ## 참고 자료

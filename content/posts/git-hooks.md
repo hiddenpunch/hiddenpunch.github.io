@@ -546,12 +546,6 @@ git commit -m "chore: add git hooks with Husky"
 
 ---
 
-> **해체분석기 #12: Git Stash - 임시 저장의 비밀**
-> 
-> - Stash는 사실 commit이다?
-> - `refs/stash`의 정체
-> - stash apply vs pop의 내부 차이
-
 ---
 
 ## 참고 자료

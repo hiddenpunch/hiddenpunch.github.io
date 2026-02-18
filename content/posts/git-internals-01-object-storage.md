@@ -347,12 +347,6 @@ flowchart LR
 
 ---
 
-> **해체분석기 #2: Git은 어떻게 변경사항을 추적할까?**
->
-> - staging area(index)의 정체
-> - `git diff`는 어떻게 동작하는가  
-> - merge vs rebase, DAG 관점에서 이해하기
-
 ---
 
 ## 참고 자료

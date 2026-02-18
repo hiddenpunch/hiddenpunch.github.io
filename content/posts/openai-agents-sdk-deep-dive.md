@@ -473,11 +473,6 @@ result = await Runner.run(triage_agent, "I want a refund for order #123")
 
 ---
 
-> **해체분석기 #4: LangGraph vs OpenAI Agents SDK 실전 비교**
->
-> - 같은 문제를 두 프레임워크로 구현
-> - 코드량, 성능, 유지보수성 비교
-
 ---
 
 ## 참고 자료

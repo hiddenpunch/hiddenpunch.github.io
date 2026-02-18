@@ -386,12 +386,6 @@ $ cat .git/logs/HEAD  # 모든 이동이 기록됨
 
 ---
 
-> **해체분석기 #11: Git Stash - 임시 저장의 비밀**
->
-> - Stash는 어디에 저장되나? (refs/stash의 정체)
-> - 왜 stash는 reflog가 never expire일까?
-> - stash apply vs pop, 내부적으로 무슨 차이?
-
 ---
 
 ## 참고 자료
