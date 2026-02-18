@@ -21,10 +21,10 @@ toc: true
 ❌ 결제 버튼을 눌러도 아무것도 안 됩니다.
 ```
 
-분명 두 달 전엔 잘 됐는데. 그 사이 커밋이 300개.  
+분명 두 달 전엔 잘 됐는데. 그 사이 커밋이 300개.
 어디서부터 잘못된 걸까요?
 
-브루트포스로 찾으면 최악의 경우 300번의 테스트.  
+브루트포스로 찾으면 최악의 경우 300번의 테스트.
 하지만 **git bisect**를 쓰면 최대 **9번**이면 됩니다.
 
 ---
@@ -45,7 +45,7 @@ toc: true
 ```
 커밋: [A B C D E F G H I J] ← J가 bad, A는 good
                  ↑ E 테스트 → good → [F G H I J] 범위로
-                     ↑ H 테스트 → bad → [F G H] 범위로
+                     ↑ H 테스트 → bad → [F G] 범위로
                    ↑ G 테스트 → bad → [F G] 범위로
                  ↑ F 테스트 → good → G가 first bad!
 ```
@@ -105,7 +105,7 @@ Previous HEAD position was f1e2d3c feat: add payment analytics event
 Switched to branch 'main'
 ```
 
-7단계 예상에 실제로 6번 만에 찾았습니다.  
+7단계 예상에 실제로 6번 만에 찾았습니다.
 `f1e2d3c` 커밋을 열어보면 결제 흐름에 analytics 이벤트를 추가하다가 비동기 처리를 빠뜨렸음이 눈에 띕니다.
 
 ---
@@ -192,7 +192,7 @@ $ git rev-list --bisect-all HEAD --not v2.0.0
 9a8b7c6d (dist=74)
 3f4e5d6a (dist=72)
 f1e2d3c4 (dist=68)
-...
+... 
 ```
 
 ---

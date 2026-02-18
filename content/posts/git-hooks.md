@@ -1,13 +1,14 @@
 ---
 title: "Git 해체분석기 #11: Hooks - Git의 자동화 시스템"
 date: 2026-02-17
+draft: false
 summary: "git commit을 실행하는 순간 뒤에서 조용히 실행되는 스크립트들. .git/hooks의 정체를 파헤친다."
 tags: ["git", "해체분석기", "hooks", "automation", "husky"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 11
-draft: false
 mermaid: true
+toc: true
 ---
 
 > `git commit`을 실행했는데 뭔가가 실행되고, 테스트가 돌아가고, 린트가 검사를 한다.  
@@ -41,7 +42,7 @@ Git은 커밋, 푸시, 머지 등 주요 작업마다 "이 시점에 뭔가 실�
 ```bash
 $ git init test-repo
 $ ls test-repo/.git/hooks/
-applypatch-msg.sample    pre-applypatch.sample
+aplypatch-msg.sample    pre-applypatch.sample
 commit-msg.sample        pre-commit.sample
 fsmonitor-watchman.sample pre-merge-commit.sample
 post-update.sample       pre-push.sample
@@ -155,7 +156,8 @@ fi
 실제 Git이 제공하는 `commit-msg.sample`도 비슷한 방식으로 `Signed-off-by` 중복을 검사합니다:
 
 ```sh
-test "" = "$(grep '^Signed-off-by: ' "$1" | sort | uniq -c | sed -e '/^[[:space:]]*1[[:space:]]/d')" || {
+test "" = ""
+$(grep '^Signed-off-by: ' "$1" | sort | uniq -c | sed -e '/^[[:space:]]*1[[:space:]]/d')" || {
     echo >&2 "Duplicate Signed-off-by lines."
     exit 1
 }
@@ -361,8 +363,7 @@ npx husky init  # .husky/pre-commit 생성, package.json에 prepare 추가
 
 ```sh
 # .husky/pre-commit (버전 관리됨!)
-npm run lint
-npm run test:unit
+npx lint-staged
 ```
 
 <pre class="mermaid">
@@ -547,7 +548,7 @@ git commit -m "chore: add git hooks with Husky"
 ## 다음 편 예고
 
 > **해체분석기 #12: Git Stash - 임시 저장의 비밀**
->
+> 
 > - Stash는 사실 commit이다?
 > - `refs/stash`의 정체
 > - stash apply vs pop의 내부 차이
