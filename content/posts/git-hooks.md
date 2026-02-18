@@ -1,13 +1,13 @@
 ---
-title: "Git 해체분석기 #22: Hooks - Git의 자동화 시스템"
+title: "Git 해체분석기 #21: Hooks - Git의 자동화 시스템"
 date: 2026-02-17
 draft: false
 summary: "git commit을 실행하는 순간 뒤에서 조용히 실행되는 스크립트들. .git/hooks의 정체를 파헤친다."
 tags: ["git", "해체분석기", "hooks", "automation", "husky"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 22
-weight: 22
+series_order: 21
+weight: 21
 mermaid: true
 toc: true
 ---

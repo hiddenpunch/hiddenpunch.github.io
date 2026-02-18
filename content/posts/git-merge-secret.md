@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #15: Merge의 비밀 - 두 브랜치는 어떻게 합쳐지나"
+title: "Git 해체분석기 #14: Merge의 비밀 - 두 브랜치는 어떻게 합쳐지나"
 date: 2026-02-16T20:00:00+09:00
 draft: false
 tags: ["git", "해체분석기", "merge", "3-way", "conflict"]
 series: ["Git 해체분석기"]
-series_order: 15
-weight: 15
+series_order: 14
+weight: 14
 mermaid: true
 toc: true
 ---

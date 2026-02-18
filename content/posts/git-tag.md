@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #8: Tag - 태그의 내부 구조와 서명"
+title: "Git 해체분석기 #7: Tag - 태그의 내부 구조와 서명"
 date: 2026-02-18
 summary: "Lightweight tag vs Annotated tag, .git/refs/tags/ 구조, GPG 서명까지 - git tag의 모든 것을 해체합니다"
 tags: ["git", "해체분석기", "tag", "gpg"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 8
-weight: 8
+series_order: 7
+weight: 7
 draft: false
 mermaid: true
 ---

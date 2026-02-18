@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #23: Stash - 작업을 잠시 숨기는 마법"
+title: "Git 해체분석기 #22: Stash - 작업을 잠시 숨기는 마법"
 date: 2026-02-17
 summary: "git stash는 어떻게 동작할까? .git/refs/stash의 정체, WIP 커밋의 비밀, 그리고 스택인 척하는 reflog"
 tags: ["git", "해체분석기", "stash", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 23
-weight: 23
+series_order: 22
+weight: 22
 draft: false
 mermaid: true
 ---

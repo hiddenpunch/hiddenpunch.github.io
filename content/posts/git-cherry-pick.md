@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #18: Cherry-pick - 커밋 하나만 골라담기"
+title: "Git 해체분석기 #17: Cherry-pick - 커밋 하나만 골라담기"
 date: 2026-02-17T18:00:00+09:00
 draft: false
 tags: ["git", "해체분석기", "cherry-pick", "rebase"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 18
-weight: 18
+series_order: 17
+weight: 17
 mermaid: true
 toc: true
 ---

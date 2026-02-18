@@ -1,13 +1,13 @@
 ---
-title: "Git 해체분석기 #21: Blame - 코드의 역사를 추적하는 법"
+title: "Git 해체분석기 #20: Blame - 코드의 역사를 추적하는 법"
 date: 2026-02-18T14:55:35+09:00
 draft: false
 summary: "이 코드 누가 짰어? git blame이 단순한 범인 찾기가 아닌 이유. blame의 내부 알고리즘, -C/-M으로 코드 이동을 추적하는 법, git log -S/-G와의 차이, 그리고 진짜 디버깅에서 어떻게 쓰는지"
 tags: ["git", "해체분석기", "blame", "debugging", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 21
-weight: 21
+series_order: 20
+weight: 20
 mermaid: true
 toc: true
 ---

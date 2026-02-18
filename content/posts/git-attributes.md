@@ -1,10 +1,10 @@
 ---
-title: "Git 해체분석기 #27: .gitattributes - 파일별 Git 동작 커스터마이징의 모든 것"
+title: "Git 해체분석기 #26: .gitattributes - 파일별 Git 동작 커스터마이징의 모든 것"
 date: 2026-02-18T14:29:00+09:00
 tags: ["git", "internals", "gitattributes", "LFS", "diff", "merge", "linguist", "binary"]
 series: ["Git 해체분석기"]
-series_order: 27
-weight: 27
+series_order: 26
+weight: 26
 ---
 
 ## 들어가며

@@ -1,13 +1,13 @@
 ---
-title: "Git 해체분석기 #20: Bisect - 버그를 찾는 이진 탐색"
+title: "Git 해체분석기 #19: Bisect - 버그를 찾는 이진 탐색"
 date: 2026-02-17T21:00:00+09:00
 draft: false
 summary: "1000개의 커밋 중 버그를 10번 만에 찾는다. git bisect의 이진 탐색 알고리즘, .git/BISECT_* 파일들의 정체, 그리고 bisect run으로 완전 자동화하는 법"
 tags: ["git", "해체분석기", "bisect", "debugging", "binary-search"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 20
-weight: 20
+series_order: 19
+weight: 19
 mermaid: true
 toc: true
 ---

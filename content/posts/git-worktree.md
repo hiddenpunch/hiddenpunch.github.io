@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #25: Worktree - 하나의 저장소, 여러 작업 디렉토리"
+title: "Git 해체분석기 #24: Worktree - 하나의 저장소, 여러 작업 디렉토리"
 date: 2026-02-17
 summary: "git worktree는 어떻게 같은 .git을 공유하면서 다른 브랜치를 동시에 열 수 있을까? .git/worktrees/ 구조, GIT_COMMON_DIR의 비밀, 그리고 clone 대신 worktree를 써야 하는 이유"
 tags: ["git", "해체분석기", "worktree", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 25
-weight: 25
+series_order: 24
+weight: 24
 draft: false
 mermaid: true
 ---

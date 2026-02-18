@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #17: Rebase의 비밀 - 히스토리는 어떻게 재작성되나"
+title: "Git 해체분석기 #16: Rebase의 비밀 - 히스토리는 어떻게 재작성되나"
 date: 2026-02-17T09:00:00+09:00
 draft: false
 tags: ["git", "해체분석기", "rebase", "cherry-pick"]
 series: ["Git 해체분석기"]
-series_order: 17
-weight: 17
+series_order: 16
+weight: 16
 mermaid: true
 toc: true
 ---

@@ -1,11 +1,11 @@
 ---
-title: "Git 해체분석기 #10: Pack 파일의 비밀"
+title: "Git 해체분석기 #9: Pack 파일의 비밀"
 date: 2026-02-14T21:15:00+09:00
 draft: false
 tags: ["git", "해체분석기", "pack", "delta", "compression"]
 series: ["Git 해체분석기"]
-series_order: 10
-weight: 10
+series_order: 9
+weight: 9
 mermaid: true
 toc: true
 ---

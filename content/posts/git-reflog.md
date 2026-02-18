@@ -1,12 +1,12 @@
 ---
-title: "Git 해체분석기 #13: Reflog - Git의 타임머신"
+title: "Git 해체분석기 #12: Reflog - Git의 타임머신"
 date: 2026-02-16
 summary: "git reset --hard로 날린 커밋, 삭제한 브랜치... 정말 사라졌을까?"
 tags: ["git", "해체분석기", "reflog"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
-series_order: 13
-weight: 13
+series_order: 12
+weight: 12
 draft: false
 mermaid: true
 ---
