@@ -7,7 +7,7 @@ tags: ["git", "해체분석기", "submodule", "subtree", "monorepo"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 24
-weight: -24
+weight: 24
 mermaid: true
 toc: true
 ---

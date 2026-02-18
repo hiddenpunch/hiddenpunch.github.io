@@ -6,7 +6,7 @@ tags: ["git", "해체분석기", "history", "linus-torvalds"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 1
-weight: -1
+weight: 1
 draft: false
 mermaid: true
 ---

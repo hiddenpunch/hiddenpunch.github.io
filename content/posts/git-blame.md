@@ -7,7 +7,7 @@ tags: ["git", "해체분석기", "blame", "debugging", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 21
-weight: -21
+weight: 21
 mermaid: true
 toc: true
 ---

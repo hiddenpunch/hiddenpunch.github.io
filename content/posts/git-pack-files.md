@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "pack", "delta", "compression"]
 series: ["Git 해체분석기"]
 series_order: 10
-weight: -10
+weight: 10
 mermaid: true
 toc: true
 ---

@@ -4,7 +4,7 @@ date: 2026-02-18T14:29:00+09:00
 tags: ["git", "internals", "gitattributes", "LFS", "diff", "merge", "linguist", "binary"]
 series: ["Git 해체분석기"]
 series_order: 27
-weight: -27
+weight: 27
 ---
 
 ## 들어가며

@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "rebase", "cherry-pick"]
 series: ["Git 해체분석기"]
 series_order: 17
-weight: -17
+weight: 17
 mermaid: true
 toc: true
 ---
