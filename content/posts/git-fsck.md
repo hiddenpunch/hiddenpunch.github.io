@@ -1,10 +1,10 @@
 ---
-title: "해체분석기: git fsck - 저장소 무결성 검사의 모든 것"
+title: "Git 해체분석기 #23: fsck - 저장소 무결성 검사의 모든 것"
 date: 2026-02-18T11:49:54+09:00
 draft: false
 tags: ["git", "internals", "fsck", "objects", "corruption", "recovery"]
 series: ["Git 해체분석기"]
-series_order: 20
+series_order: 23
 ---
 
 ## 들어가며

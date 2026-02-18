@@ -1,10 +1,10 @@
 ---
-title: "해체분석기: git sparse-checkout - 거대 모노레포 다루기"
+title: "Git 해체분석기 #25: Sparse-checkout - 거대 모노레포 다루기"
 date: 2026-02-18T11:50:17+09:00
 draft: false
 tags: ["git", "internals", "sparse-checkout", "monorepo", "partial-clone", "performance"]
 series: ["Git 해체분석기"]
-series_order: 20
+series_order: 25
 ---
 
 ## 들어가며

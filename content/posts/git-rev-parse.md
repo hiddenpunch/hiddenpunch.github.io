@@ -1,10 +1,10 @@
 ---
-title: "해체분석기: git rev-parse - 레퍼런스 해석 파이프라인의 모든 것"
+title: "Git 해체분석기 #26: Rev-parse - 레퍼런스 해석 파이프라인의 모든 것"
 date: 2026-02-18T14:09:55+09:00
 draft: false
 tags: ["git", "internals", "rev-parse", "plumbing", "references", "SHA"]
 series: ["Git 해체분석기"]
-series_order: 21
+series_order: 26
 ---
 
 ## 들어가며
