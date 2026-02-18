@@ -9,8 +9,6 @@ weight: 6
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #5: Rev-parse - 레퍼런스 해석 파이프라인의 모든 것](/posts/git-rev-parse/)
-
 
 ## 문제: Hash를 외워야 했다
 

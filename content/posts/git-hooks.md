@@ -11,8 +11,6 @@ weight: 21
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #20: Blame - 코드의 역사를 추적하는 법](/posts/git-blame/)
-
 
 > `git commit`을 실행했는데 뭔가가 실행되고, 테스트가 돌아가고, 린트가 검사를 한다.  
 > `.git/hooks` 폴더에 숨겨진 **Git의 자동화 엔진**을 해체해봅니다.

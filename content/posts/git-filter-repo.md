@@ -6,8 +6,6 @@ series: ["Git 해체분석기"]
 series_order: 18
 weight: 18
 ---
-> 이전 글: [Git 해체분석기 #17: Cherry-pick - 커밋 하나만 골라담기](/posts/git-cherry-pick/)
-
 
 ## 들어가며
 

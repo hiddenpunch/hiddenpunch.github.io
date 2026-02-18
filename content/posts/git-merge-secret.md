@@ -9,8 +9,6 @@ weight: 14
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #13: Notes - 커밋을 건드리지 않고 메모 붙이기](/posts/git-notes/)
-
 
 ## 문제: 두 개의 역사
 

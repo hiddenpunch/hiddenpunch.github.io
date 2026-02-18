@@ -9,8 +9,6 @@ weight: 8
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #7: Tag - 태그의 내부 구조와 서명](/posts/git-tag/)
-
 
 ## Git 이전: Patches and Tarballs
 

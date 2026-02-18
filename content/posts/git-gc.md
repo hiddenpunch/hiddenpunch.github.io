@@ -7,8 +7,6 @@ series: ["Git 해체분석기"]
 series_order: 10
 weight: 10
 ---
-> 이전 글: [Git 해체분석기 #9: Pack 파일의 비밀](/posts/git-pack-files/)
-
 
 ## 들어가며
 

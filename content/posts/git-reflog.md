@@ -10,8 +10,6 @@ weight: 12
 draft: false
 mermaid: true
 ---
-> 이전 글: [Git 해체분석기 #11: fsck - 저장소 무결성 검사의 모든 것](/posts/git-fsck/)
-
 
 > `git reset --hard`를 실수로 눌렀을 때, 당신을 구해줄 마지막 안전망.
 

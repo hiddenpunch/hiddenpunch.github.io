@@ -10,8 +10,6 @@ weight: 24
 draft: false
 mermaid: true
 ---
-> 이전 글: [Git 해체분석기 #23: Submodules - 저장소 안의 저장소](/posts/git-submodules/)
-
 
 > "급한 버그 수정인데 지금 작업 중인 게 너무 아깝고..." — `git stash`를 쓰기도, `git clone`을 하기도 애매한 그 순간
 

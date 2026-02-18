@@ -9,8 +9,6 @@ weight: 9
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #8: Remote는 어떻게 탄생했나](/posts/git-remote-evolution/)
-
 
 ## Loose Object의 한계
 

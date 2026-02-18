@@ -10,8 +10,6 @@ mermaid: true
 toc: true
 description: "git diff는 어떻게 두 파일의 차이를 찾는가? 1974년 Hunt-McIlroy부터 1986년 Myers 알고리즘까지, LCS와 diff의 수학적 원리를 해체분석합니다."
 ---
-> 이전 글: [Git 해체분석기 #3: Git 진화의 첫 2주](/posts/git-evolution-first-two-weeks/)
-
 
 ## Diff의 역사: 50년 된 알고리즘
 

@@ -6,8 +6,6 @@ series: ["Git 해체분석기"]
 series_order: 26
 weight: 26
 ---
-> 이전 글: [Git 해체분석기 #25: Sparse-checkout - 거대 모노레포 다루기](/posts/git-sparse-checkout/)
-
 
 ## 들어가며
 

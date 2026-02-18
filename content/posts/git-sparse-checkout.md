@@ -7,8 +7,6 @@ series: ["Git 해체분석기"]
 series_order: 25
 weight: 25
 ---
-> 이전 글: [Git 해체분석기 #24: Worktree - 하나의 저장소, 여러 작업 디렉토리](/posts/git-worktree/)
-
 
 ## 들어가며
 

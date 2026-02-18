@@ -10,8 +10,6 @@ weight: 3
 draft: false
 mermaid: true
 ---
-> 이전 글: [Git 해체분석기 #2: 초창기 Git은 어떻게 사용했을까?](/posts/git-origins-how-to-use/)
-
 
 
 ## 들어가며

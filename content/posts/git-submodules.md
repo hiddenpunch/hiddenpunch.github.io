@@ -11,8 +11,6 @@ weight: 23
 mermaid: true
 toc: true
 ---
-> 이전 글: [Git 해체분석기 #22: Stash - 작업을 잠시 숨기는 마법](/posts/git-stash/)
-
 
 > "저장소 안에 저장소가 있다. 근데 파일 시스템에선 그냥 폴더처럼 보인다."  
 > **Submodule의 본질은 하나의 SHA다.**

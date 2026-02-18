@@ -10,8 +10,6 @@ weight: 22
 draft: false
 mermaid: true
 ---
-> 이전 글: [Git 해체분석기 #21: Hooks - Git의 자동화 시스템](/posts/git-hooks/)
-
 
 > "잠깐만, 이거 어디다 뒀지?" — 모든 개발자가 `git stash pop` 전에 드는 생각
 
