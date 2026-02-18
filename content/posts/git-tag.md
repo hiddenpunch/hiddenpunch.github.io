@@ -10,6 +10,8 @@ weight: 7
 draft: false
 mermaid: true
 ---
+> 이전 글: [Git 해체분석기 #6: Branch는 어떻게 탄생했나](/posts/git-branches-birth/)
+
 
 > `git tag v1.0.0` 한 줄로 태그를 달지만, 실제로 `.git` 폴더 안에서는 무슨 일이 일어날까요?
 

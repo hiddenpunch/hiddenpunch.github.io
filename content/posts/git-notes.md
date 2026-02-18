@@ -10,6 +10,8 @@ weight: 13
 draft: false
 mermaid: true
 ---
+> 이전 글: [Git 해체분석기 #12: Reflog - Git의 타임머신](/posts/git-reflog/)
+
 
 > "커밋 메시지를 수정하면 해시가 바뀌잖아요. 이미 push한 커밋에 나중에 정보를 추가할 방법이 없을까요?" — 배포 자동화 파이프라인을 구축하던 어느 DevOps 엔지니어
 

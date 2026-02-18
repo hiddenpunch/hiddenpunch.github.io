@@ -10,6 +10,8 @@ weight: 2
 draft: false
 mermaid: true
 ---
+> 이전 글: [Git 해체분석기 #1: Git의 탄생 - 첫 커밋을 열어보다](/posts/git-origins-first-commit/)
+
 
 > 이번엔 실제로 **어떻게 사용하는지** 알아보자.
 

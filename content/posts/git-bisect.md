@@ -11,6 +11,8 @@ weight: 19
 mermaid: true
 toc: true
 ---
+> 이전 글: [Git 해체분석기 #18: filter-repo - 히스토리 재작성의 끝판왕](/posts/git-filter-repo/)
+
 
 > "어디서 망가진 거지?" — 버그를 쫓는 모든 개발자의 한숨
 

@@ -7,6 +7,8 @@ series: ["Git 해체분석기"]
 series_order: 5
 weight: 5
 ---
+> 이전 글: [Git 해체분석기 #4: Diff의 비밀 - 두 파일의 차이를 어떻게 찾나](/posts/git-diff-secret/)
+
 
 ## 들어가며
 

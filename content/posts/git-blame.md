@@ -11,6 +11,8 @@ weight: 20
 mermaid: true
 toc: true
 ---
+> 이전 글: [Git 해체분석기 #19: Bisect - 버그를 찾는 이진 탐색](/posts/git-bisect/)
+
 
 > "이 코드 누가 짠 거야?" — 그 사람이 바로 당신일 때의 침묵
 

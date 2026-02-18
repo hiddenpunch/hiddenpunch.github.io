@@ -10,6 +10,8 @@ weight: 17
 mermaid: true
 toc: true
 ---
+> 이전 글: [Git 해체분석기 #16: Rebase의 비밀 - 히스토리는 어떻게 재작성되나](/posts/git-rebase-secret/)
+
 
 > "Merge는 브랜치 전체를 데려온다. Cherry-pick은 원하는 것만 고른다."
 

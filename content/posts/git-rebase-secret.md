@@ -9,6 +9,8 @@ weight: 16
 mermaid: true
 toc: true
 ---
+> 이전 글: [Git 해체분석기 #15: rerere - 충돌 해결을 기억하는 Git](/posts/git-rerere/)
+
 
 > "Rebase는 마법이 아니다. 그저 cherry-pick의 반복일 뿐이다."
 

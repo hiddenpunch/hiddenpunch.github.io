@@ -7,6 +7,8 @@ series: ["Git 해체분석기"]
 series_order: 11
 weight: 11
 ---
+> 이전 글: [Git 해체분석기 #10: GC - 가비지 컬렉션의 비밀](/posts/git-gc/)
+
 
 ## 들어가며
 
