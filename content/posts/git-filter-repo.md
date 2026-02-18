@@ -4,7 +4,7 @@ date: 2026-02-18T14:28:00+09:00
 tags: ["git", "internals", "filter-repo", "history-rewriting", "security", "bfg"]
 series: ["Git 해체분석기"]
 series_order: 24
-weight: 24
+weight: -24
 ---
 
 ## 들어가며

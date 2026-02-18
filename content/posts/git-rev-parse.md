@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "internals", "rev-parse", "plumbing", "references", "SHA"]
 series: ["Git 해체분석기"]
 series_order: 26
-weight: 26
+weight: -26
 ---
 
 ## 들어가며

@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "remote", "fetch", "push", "origin"]
 series: ["Git 해체분석기"]
 series_order: 6
-weight: 6
+weight: -6
 mermaid: true
 toc: true
 ---

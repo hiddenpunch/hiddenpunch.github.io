@@ -7,7 +7,7 @@ tags: ["git", "해체분석기", "bisect", "debugging", "binary-search"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 14
-weight: 14
+weight: -14
 mermaid: true
 toc: true
 ---

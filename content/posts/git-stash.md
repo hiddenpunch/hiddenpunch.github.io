@@ -6,7 +6,7 @@ tags: ["git", "해체분석기", "stash", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 12
-weight: 12
+weight: -12
 draft: false
 mermaid: true
 ---

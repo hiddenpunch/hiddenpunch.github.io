@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "internals", "fsck", "objects", "corruption", "recovery"]
 series: ["Git 해체분석기"]
 series_order: 23
-weight: 23
+weight: -23
 ---
 
 ## 들어가며

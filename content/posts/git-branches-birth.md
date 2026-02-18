@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "branch", "refs"]
 series: ["Git 해체분석기"]
 series_order: 5
-weight: 5
+weight: -5
 mermaid: true
 toc: true
 ---

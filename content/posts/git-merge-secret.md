@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "merge", "3-way", "conflict"]
 series: ["Git 해체분석기"]
 series_order: 8
-weight: 8
+weight: -8
 mermaid: true
 toc: true
 ---

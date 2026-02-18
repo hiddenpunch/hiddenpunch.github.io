@@ -5,7 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "diff", "myers", "algorithm", "lcs"]
 series: ["Git 해체분석기"]
 series_order: 17
-weight: 17
+weight: -17
 mermaid: true
 toc: true
 description: "git diff는 어떻게 두 파일의 차이를 찾는가? 1974년 Hunt-McIlroy부터 1986년 Myers 알고리즘까지, LCS와 diff의 수학적 원리를 해체분석합니다."
