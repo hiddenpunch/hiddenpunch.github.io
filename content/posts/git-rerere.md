@@ -5,6 +5,7 @@ draft: false
 tags: ["git", "해체분석기", "rerere", "merge", "conflict", "internals"]
 series: ["Git 해체분석기"]
 series_order: 21
+weight: 21
 mermaid: true
 toc: true
 description: "git rerere는 어떻게 충돌 해결 방법을 기억하는가? .git/rr-cache/ 구조, preimage/postimage 파일, 그리고 장기 브랜치 관리에서의 실전 가치를 해체분석합니다."

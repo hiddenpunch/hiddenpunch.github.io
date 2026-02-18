@@ -6,6 +6,7 @@ tags: ["git", "해체분석기", "worktree", "internals"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 16
+weight: 16
 draft: false
 mermaid: true
 ---

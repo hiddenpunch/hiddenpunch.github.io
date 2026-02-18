@@ -6,6 +6,7 @@ tags: ["git", "해체분석기", "reflog"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 10
+weight: 10
 draft: false
 mermaid: true
 ---

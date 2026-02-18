@@ -6,6 +6,7 @@ tags: ["git", "해체분석기", "tag", "gpg"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 19
+weight: 19
 draft: false
 mermaid: true
 ---

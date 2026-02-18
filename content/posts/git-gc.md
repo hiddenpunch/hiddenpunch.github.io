@@ -5,6 +5,7 @@ draft: false
 tags: ["git", "internals", "gc", "pack-files", "objects", "performance"]
 series: ["Git 해체분석기"]
 series_order: 20
+weight: 20
 ---
 
 ## 들어가며

@@ -7,6 +7,7 @@ tags: ["git", "해체분석기", "hooks", "automation", "husky"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 11
+weight: 11
 mermaid: true
 toc: true
 ---

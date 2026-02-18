@@ -6,6 +6,7 @@ tags: ["git", "해체분석기", "notes", "internals", "ci-cd"]
 categories: ["개발"]
 series: ["Git 해체분석기"]
 series_order: 22
+weight: 22
 draft: false
 mermaid: true
 ---
