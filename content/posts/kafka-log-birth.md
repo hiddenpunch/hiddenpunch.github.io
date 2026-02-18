@@ -299,7 +299,6 @@ Kafka의 성공 비결은 **"제약을 받아들인 것"**이다.
 
 ---
 
-## 다음 편 예고
 
 **Kafka 해체분석기 #2: "Zero-Copy의 비밀 - OS 커널과의 춤"**
 - `FileChannel.transferTo()`의 내부 동작

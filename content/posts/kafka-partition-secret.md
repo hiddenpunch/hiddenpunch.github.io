@@ -341,7 +341,6 @@ Kafka의 Partition은 단순한 기술적 트릭이 아니다. 이건 **분산 �
 
 ## 다음 예고: Kafka 해체분석기 #3
 
-다음 편에서는 **Replication의 비밀 - 어떻게 데이터를 잃지 않는가**를 다룰 예정입니다.
 
 - ISR (In-Sync Replica)의 마법
 - Leader Election 알고리즘
