@@ -503,6 +503,7 @@ Kafka의 Replication은 **"어떻게 장애에 대비하느냐"**의 정석이�
 
 ## 다음 예고: Kafka 해체분석기 #4
 
+다음 편에서는 **Consumer의 비밀 - Offset을 어떻게 관리하는가**를 다룰 예정입니다.
 
 - `__consumer_offsets` topic의 내부
 - Rebalancing 전쟁과 Cooperative Sticky

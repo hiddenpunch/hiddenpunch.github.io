@@ -463,3 +463,4 @@ $ git blame -M --first-parent main.py
 
 ---
 
+*다음 편: Git 해체분석기 #16 - git notes: 커밋을 건드리지 않고 메모를 붙이는 법*

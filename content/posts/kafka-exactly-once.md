@@ -777,6 +777,7 @@ AddPartitionsToTxn 오버헤드:
 
 ## 다음 예고: Kafka 해체분석기 #9
 
+다음 편에서는 **Consumer Rebalancing의 비밀 - Eager부터 Cooperative까지**를 다룰 예정입니다.
 
 - Group Coordinator의 역할
 - Rebalancing Protocol (Eager vs Cooperative)
