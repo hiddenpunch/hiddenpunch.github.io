@@ -1,10 +1,10 @@
 ---
-title: "Git 해체분석기 #18: filter-repo - 히스토리 재작성의 끝판왕"
-date: 2026-02-18T14:28:00+09:00
+title: "해체분석기: git filter-repo - 히스토리 재작성의 끝판왕"
+date: 2026-02-18T16:25:47+09:00
+draft: false
 tags: ["git", "internals", "filter-repo", "history-rewriting", "security", "bfg"]
-series: ["Git 해체분석기"]
-series_order: 18
-weight: 18
+series: ["해체분석기"]
+series_order: 20
 ---
 
 ## 들어가며
