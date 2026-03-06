@@ -2,28 +2,57 @@
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    mermaid.initialize({ 
-      startOnLoad: false, 
-      theme: 'neutral',
-      securityLevel: 'loose'
-    });
+    // 다크모드 감지
+    function getMermaidTheme() {
+      const isDark = document.body.classList.contains('dark') || 
+                     window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return isDark ? 'dark' : 'default';
+    }
     
-    // Find all code blocks with language-mermaid class
-    document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeBlock) {
-      const pre = codeBlock.parentElement;
-      const mermaidDiv = document.createElement('div');
-      mermaidDiv.className = 'mermaid';
-      mermaidDiv.textContent = codeBlock.textContent;
-      pre.parentElement.replaceChild(mermaidDiv, pre);
-    });
+    function initMermaid() {
+      mermaid.initialize({ 
+        startOnLoad: false, 
+        theme: getMermaidTheme(),
+        securityLevel: 'loose'
+      });
+      
+      // Find all code blocks with language-mermaid class
+      document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeBlock) {
+        const pre = codeBlock.parentElement;
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.textContent = codeBlock.textContent;
+        pre.parentElement.replaceChild(mermaidDiv, pre);
+      });
+      
+      mermaid.run();
+    }
     
-    mermaid.run();
+    initMermaid();
+    
+    // 테마 토글 시 mermaid 다시 렌더링
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function() {
+        setTimeout(function() {
+          document.querySelectorAll('.mermaid').forEach(function(el) {
+            el.removeAttribute('data-processed');
+          });
+          mermaid.initialize({ theme: getMermaidTheme(), securityLevel: 'loose' });
+          mermaid.run();
+        }, 100);
+      });
+    }
   });
 </script>
 <style>
   .mermaid {
     text-align: center;
     margin: 1.5em 0;
+  }
+  /* 다크모드에서 mermaid 배경 투명하게 */
+  .dark .mermaid {
+    background: transparent;
   }
 </style>
 {{ end }}
