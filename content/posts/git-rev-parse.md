@@ -223,354 +223,42 @@ $ git checkout @{-1}     # git checkout -와 동일
 
 ---
 
-## `--symbolic-full-name`: 이름을 SHA로 변환하지 말라
-
-대부분의 경우 `rev-parse`는 SHA를 반환한다. 하지만 때로는 **완전한 ref 이름**이 필요하다.
+## 자주 쓰는 패턴
 
 ```bash
-# SHA 반환
+# 현재 커밋 SHA
 $ git rev-parse HEAD
 a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
 
-# 심볼릭 이름 반환
-$ git rev-parse --symbolic-full-name HEAD
-refs/heads/main
+# 짧은 SHA (CI에서 Docker 태그 등에 활용)
+$ git rev-parse --short HEAD
+a1b2c3d
 
-$ git rev-parse --symbolic-full-name @{u}
-refs/remotes/origin/main
-
-# 브랜치 이름만 추출
+# 현재 브랜치 이름
 $ git rev-parse --abbrev-ref HEAD
 main
 
-$ git rev-parse --abbrev-ref @{u}
-origin/main
+# 브랜치 존재 여부 확인
+$ git rev-parse --verify refs/heads/feature 2>/dev/null && echo "exists"
 ```
-
-**내부 동작:** SHA 해석 파이프라인을 실행하되, 마지막 단계에서 SHA 대신 해당 ref의 전체 경로를 반환한다. Symbolic ref(`HEAD → refs/heads/main`)의 경우 역참조하지 않고 그 symbolic 이름을 그대로 반환한다.
-
-`--symbolic` (full-name 없이)는 짧은 이름도 허용한다:
-
-```bash
-$ git rev-parse --symbolic HEAD
-HEAD
-
-$ git rev-parse --symbolic refs/heads/main
-refs/heads/main
-```
-
----
-
-## `--verify`: 파이프라인을 검증 모드로
-
-기본적으로 `rev-parse`는 찾지 못하면 오류를 출력하고 종료한다. `--verify`는 이를 **더 엄격하게** 만든다: 정확히 하나의 오브젝트여야 한다.
-
-```bash
-# 존재하는 ref: 성공
-$ git rev-parse --verify main
-a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2
-
-# 존재하지 않는 ref: 오류 메시지 없이 종료 코드 128
-$ git rev-parse --verify nonexistent-branch 2>/dev/null
-$ echo $?
-128
-
-# 스크립트에서 브랜치 존재 여부 확인
-if git rev-parse --verify --quiet refs/heads/feature/auth > /dev/null 2>&1; then
-    echo "브랜치 존재함"
-else
-    echo "브랜치 없음"
-fi
-```
-
-`--quiet`와 함께 쓰면 오류 메시지를 억제한다. 스크립트에서 ref 존재 여부를 확인할 때 표준 패턴이다.
-
-**`--verify`가 확인하는 것:**
-1. 입력이 정확히 하나의 토큰인가
-2. 해석 결과가 Git 오브젝트 데이터베이스에 실제로 존재하는가
-3. 타입 제약(`^{commit}`, `^{tree}` 등)이 있다면 충족되는가
-
----
-
-## Plumbing vs Porcelain: `rev-parse`가 받는 환경 변수
-
-`rev-parse`는 Git의 **plumbing** 명령이다. Porcelain 명령(`git checkout`, `git log`)이 내부적으로 호출하는 저수준 도구다. 이 구분이 중요한 이유는 **환경 변수 처리** 때문이다.
-
-### Git이 사용하는 핵심 환경 변수
-
-```bash
-# GIT_DIR: .git 디렉토리 위치 강제 지정
-$ GIT_DIR=/path/to/other/.git git rev-parse HEAD
-
-# GIT_WORK_TREE: 워킹 트리 위치 강제 지정
-$ GIT_DIR=/path/to/repo/.git GIT_WORK_TREE=/path/to/worktree git rev-parse --show-toplevel
-
-# GIT_NAMESPACE: ref 네임스페이스 (GitHub PR refs 같은 것)
-$ GIT_NAMESPACE=pull/42 git rev-parse HEAD
-
-# GIT_OBJECT_DIRECTORY: object store 위치
-$ GIT_OBJECT_DIRECTORY=/alt/objects git rev-parse abc123
-```
-
-### Porcelain이 Plumbing을 호출할 때
-
-`git checkout feature`를 실행하면 내부에서 이런 일이 일어난다:
-
-```
-git checkout feature
-    └─→ rev-parse feature       → SHA 해석
-    └─→ read-tree -u -m HEAD feature → 워킹 트리 업데이트
-    └─→ symbolic-ref HEAD refs/heads/feature → HEAD 갱신
-```
-
-Porcelain은 사용자의 터미널 환경을 상속하고, Plumbing에 필요한 환경 변수를 설정한 뒤 호출한다.
-
-### `--git-dir`, `--show-toplevel` 모드
-
-`rev-parse`는 SHA 해석 외에도 저장소 자체에 대한 정보를 제공한다:
-
-```bash
-# .git 디렉토리 경로
-$ git rev-parse --git-dir
-/Users/gideok/project/.git
-
-# 루트 디렉토리 (--show-toplevel은 워킹 트리 필요)
-$ git rev-parse --show-toplevel
-/Users/gideok/project
-
-# 현재 위치가 git 저장소 안인지 확인
-$ git rev-parse --is-inside-work-tree
-true
-
-# 현재 위치가 .git 디렉토리 안인지
-$ git rev-parse --is-inside-git-dir
-false
-
-# prefix: 루트에서 현재 위치까지의 상대 경로
-$ git rev-parse --show-prefix
-src/components/
-```
-
-이 기능들은 플러밍 스크립트에서 저장소 구조를 탐색하는 데 필수적이다.
-
----
-
-## 실전: CI 스크립트에서 `rev-parse` 활용
-
-이제 실제 사용 패턴을 보자. CI/CD 환경에서 `rev-parse`는 거의 모든 Git 관련 스크립트의 핵심이다.
-
-### 패턴 1: 안전한 버전 태그 추출
-
-```bash
-#!/bin/bash
-# 현재 커밋에 정확히 붙어있는 태그 추출 (CI 릴리스 파이프라인)
-
-get_version_tag() {
-    local sha
-    sha=$(git rev-parse HEAD)
-    
-    # HEAD에 직접 붙어있는 태그만 (--exact-match)
-    local tag
-    tag=$(git describe --exact-match --tags HEAD 2>/dev/null)
-    
-    if [ -z "$tag" ]; then
-        # 태그가 없으면 dev 버전 형식으로
-        local short_sha
-        short_sha=$(git rev-parse --short HEAD)
-        echo "dev-${short_sha}"
-    else
-        echo "$tag"
-    fi
-}
-
-VERSION=$(get_version_tag)
-echo "Building version: $VERSION"
-```
-
-### 패턴 2: 브랜치 안전 검증
-
-```bash
-#!/bin/bash
-# 배포 전 브랜치 검증
-
-DEPLOY_BRANCH="main"
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
-# Detached HEAD 상태 처리
-if [ "$CURRENT_BRANCH" = "HEAD" ]; then
-    echo "ERROR: Detached HEAD state. Cannot deploy."
-    exit 1
-fi
-
-# main 브랜치인지 확인
-if [ "$CURRENT_BRANCH" != "$DEPLOY_BRANCH" ]; then
-    echo "ERROR: Must deploy from '$DEPLOY_BRANCH', currently on '$CURRENT_BRANCH'"
-    exit 1
-fi
-
-# upstream과 동기화 확인
-LOCAL=$(git rev-parse HEAD)
-REMOTE=$(git rev-parse @{u} 2>/dev/null)
-
-if [ -z "$REMOTE" ]; then
-    echo "WARNING: No upstream set, skipping sync check"
-elif [ "$LOCAL" != "$REMOTE" ]; then
-    echo "ERROR: Local branch is out of sync with upstream"
-    echo "  Local:  $LOCAL"
-    echo "  Remote: $REMOTE"
-    exit 1
-fi
-
-echo "✅ Branch validation passed"
-```
-
-### 패턴 3: 변경된 파일 범위 감지
-
-```bash
-#!/bin/bash
-# PR의 변경 파일 목록 추출 (GitHub Actions에서 자주 사용)
-
-BASE_SHA="${GITHUB_BASE_SHA:-}"
-HEAD_SHA=$(git rev-parse HEAD)
-
-if [ -z "$BASE_SHA" ]; then
-    # 로컬 환경: merge-base 계산
-    BASE_SHA=$(git rev-parse origin/main)
-fi
-
-# 두 커밋 사이의 변경 파일
-CHANGED_FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
-
-# 특정 디렉토리 변경 여부 확인
-if echo "$CHANGED_FILES" | grep -q "^src/"; then
-    echo "Frontend changed, running npm build..."
-    npm run build
-fi
-
-if echo "$CHANGED_FILES" | grep -q "^backend/"; then
-    echo "Backend changed, running tests..."
-    pytest backend/
-fi
-```
-
-### 패턴 4: short SHA를 Docker 이미지 태그로
-
-```bash
-#!/bin/bash
-# Docker 이미지에 Git 정보 인코딩
-
-IMAGE_NAME="myapp"
-SHORT_SHA=$(git rev-parse --short=8 HEAD)  # 8자리 지정
-BRANCH=$(git rev-parse --abbrev-ref HEAD | tr '/' '-')  # 슬래시 치환
-BUILD_DATE=$(date +%Y%m%d)
-
-IMAGE_TAG="${BRANCH}-${SHORT_SHA}-${BUILD_DATE}"
-FULL_TAG="${IMAGE_NAME}:${IMAGE_TAG}"
-
-docker build \
-    --label "git.sha=$(git rev-parse HEAD)" \
-    --label "git.branch=${BRANCH}" \
-    --label "git.short_sha=${SHORT_SHA}" \
-    -t "$FULL_TAG" \
-    .
-
-echo "Built: $FULL_TAG"
-```
-
-### 패턴 5: 저장소 루트 기준 상대 경로
-
-```bash
-#!/bin/bash
-# 어느 디렉토리에서 실행해도 저장소 루트 기준으로 동작
-
-REPO_ROOT=$(git rev-parse --show-toplevel)
-
-# 루트 기준으로 파일 읽기
-CONFIG_FILE="$REPO_ROOT/config/deploy.yaml"
-
-if [ ! -f "$CONFIG_FILE" ]; then
-    echo "ERROR: $CONFIG_FILE not found"
-    exit 1
-fi
-
-cd "$REPO_ROOT" || exit 1
-echo "Working from: $REPO_ROOT"
-```
-
----
-
-## 고급: `--parseopt`로 스크립트 인수 파싱
-
-잘 알려지지 않은 기능이지만, `rev-parse`는 Git 스타일 옵션 파싱도 제공한다:
-
-```bash
-#!/bin/bash
-# git-mycommand 같은 스크립트에서 사용
-
-OPTS_SPEC="\
-my-command [options] <revision>
---
-h,help    show help
-v,verbose be verbose
-n,dry-run=  dry run with count
-branch=   target branch
-"
-
-eval "$(echo "$OPTS_SPEC" | git rev-parse --parseopt -- "$@" || echo exit $?)"
-
-while [ $# -gt 0 ]; do
-    opt="$1"
-    shift
-    case "$opt" in
-        -v) VERBOSE=1 ;;
-        -n) DRY_RUN_COUNT="$1"; shift ;;
-        --branch) BRANCH="$1"; shift ;;
-        --) break ;;
-    esac
-done
-
-REVISION="$1"
-SHA=$(git rev-parse --verify "$REVISION")
-echo "Resolved: $REVISION → $SHA"
-```
-
----
-
-## `rev-parse`의 내부: 소스 코드 레벨
-
-Git 소스코드에서 `rev-parse`의 핵심은 `revision.c`의 `get_sha1_with_context()` 함수다. 이 함수가 위에서 설명한 7단계 파이프라인을 구현한다.
-
-실제 처리 흐름:
-
-```
-get_sha1_with_context(name, flags, sha1, oc)
-    ├── get_sha1_basic()      # SHA prefix 매칭
-    ├── lookup_ref()          # refs/ 탐색
-    │     ├── read_ref_full() # 루스 ref 파일
-    │     └── packed_refs     # packed-refs 탐색
-    ├── parse_object_type()   # ^{commit}, ^{tree} 처리
-    └── deref_tag()           # annotated tag 역참조
-```
-
-`~N`과 `^N` 처리는 `interpret_nth_prior_checkout()`과 `peel_to_type()`이 담당한다. Reflog 접근은 `read_ref_at()`이 `.git/logs/` 파일을 직접 파싱한다.
 
 ---
 
 ## 마치며
 
-`git rev-parse`는 Git의 레퍼런스 세계와 SHA 세계를 잇는 다리다. 표면은 단순하지만 내부는 정교하다.
+`git rev-parse`는 Git의 **레퍼런스 해석 엔진**이다.
 
-오늘 살펴본 핵심을 정리하면:
+핵심 정리:
 
-- **7단계 파이프라인**: SHA prefix → 루스 ref → packed-refs 순서로 탐색
-- **reflog는 별도**: `@{N}`, `@{time}` 문법으로 ref 이력 접근
-- **토큰 수정자**: `~`(첫 번째 부모), `^`(N번째 부모), `^{}`(태그 역참조)
-- **`--symbolic-full-name`**: SHA 대신 완전한 ref 이름 반환
-- **`--verify`**: 엄격한 검증, 스크립트에서 ref 존재 확인 표준 패턴
-- **환경 변수**: `GIT_DIR`, `GIT_WORK_TREE` 등으로 동작 제어
-- **CI 활용**: short SHA, 브랜치 검증, 변경 범위 감지의 핵심 도구
+| 개념 | 설명 |
+|------|------|
+| 7단계 파이프라인 | SHA prefix → 루스 ref → packed-refs 순서로 탐색 |
+| reflog | `@{N}`, `@{time}` 문법으로 ref 이력 접근 |
+| `~N` | 첫 번째 부모를 N번 타고 올라가기 |
+| `^N` | N번째 부모 선택 (머지 커밋용) |
+| `^{}` | 태그를 커밋까지 역참조 |
 
-Git 스크립트를 짜다가 "이 브랜치가 존재하는지 어떻게 확인하지?", "현재 커밋의 SHA를 어떻게 가져오지?"라는 질문이 나올 때마다 `rev-parse`가 답이다. 이제 그 답이 내부적으로 어떻게 동작하는지도 알게 됐다.
+`git checkout main`을 치면 내부에서 `rev-parse main`이 실행된다. 사람이 읽는 이름을 Git이 이해하는 SHA로 바꾸는 조용한 번역기다.
 
 ---
 
