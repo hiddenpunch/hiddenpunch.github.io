@@ -516,44 +516,6 @@ $ git diff --diff-algorithm=minimal
 
 ---
 
-## Git 내부: diff는 어떻게 저장되나
-
-흥미로운 사실: **Git은 diff를 저장하지 않습니다.**
-
-Git은 파일의 **전체 스냅샷(blob)**을 저장합니다. diff는 필요할 때마다 실시간으로 계산합니다.
-
-```bash
-# 커밋의 내부
-$ git cat-file -p HEAD
-tree 1a2b3c4d
-parent abc123
-author ...
-
-# tree의 내부
-$ git cat-file -p 1a2b3c4d
-100644 blob 7f8e9a0b    hello.py
-
-# blob의 내부 (실제 파일 내용 전체)
-$ git cat-file -p 7f8e9a0b
-def hello():
-    print("Hello World")
-    return True
-```
-
-<pre class="mermaid">
-flowchart LR
-    C1["Commit A\n(blob_old)"] --> |"git diff"| CALC["Myers 알고리즘\n실시간 계산"]
-    C2["Commit B\n(blob_new)"] --> CALC
-    CALC --> RESULT["Diff 출력"]
-    
-    style CALC fill:#ffd43b
-    style RESULT fill:#69db7c
-</pre>
-
-단, **pack file**에서는 delta compression을 사용합니다. 유사한 blob들을 delta(차이)로 압축해 저장합니다. 하지만 이건 내부 최적화일 뿐, `git diff`와는 별개입니다.
-
----
-
 ## 정리: Diff의 본질
 
 | 개념 | 설명 |
