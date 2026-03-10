@@ -11,7 +11,7 @@ mermaid: true
 toc: true
 ---
 
-> 이 글은 [OpenTelemetry Zero-code Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/zero-code/)과 [Code-based Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/code-based/) 공식 문서를 기반으로 작성되었습니다.
+> 이 글은 [OpenTelemetry Zero-code Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/zero-code/), [Code-based Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/code-based/), [Libraries](https://opentelemetry.io/docs/concepts/instrumentation/libraries/) 공식 문서를 기반으로 작성되었습니다.
 
 [#6](/posts/otel-baggage-and-profiles/)까지 OTel의 다섯 가지 신호를 모두 다뤘다. 이제 **"그 신호들은 실제로 어떻게 만들어지는가"**에 답할 차례다.
 
@@ -147,51 +147,74 @@ def process_order(order_id: str, user_id: str):
 
 Zero-code가 만든 HTTP/DB Span 위에, Code-based로 **비즈니스 의미가 담긴 Span과 Attribute**를 추가하는 것이다.
 
-### Instrumentation Library: 중간 지대
+---
 
-직접 API를 호출하는 것과 완전 자동 사이에 **Instrumentation Library**라는 중간 지대가 있다:
+## Instrumentation Library와 Native Instrumentation
+
+사실 Zero-code와 Code-based 사이에는 **계측을 누가 작성하느냐**에 따른 중요한 구분이 하나 더 있다.
+
+### Instrumentation Library: 외부에서 감싸기
+
+대부분의 라이브러리(Flask, requests, psycopg2 등)는 OTel 코드가 내장돼 있지 않다. 그래서 OTel 커뮤니티가 **별도 패키지**로 감싸는 계측을 만들어 둔 것이 Instrumentation Library다:
 
 ```python
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 
-# 한 줄로 Flask의 모든 라우트에 Span 자동 생성
+# Flask 자체에는 OTel 코드가 없지만,
+# 이 패키지가 before_request/after_request 훅을 이용해 Span을 만든다
 FlaskInstrumentor().instrument_app(app)
 ```
 
-코드 수정이긴 하지만 **한 줄**이다. 이건 Zero-code 에이전트가 내부적으로 하는 것과 같은 동작을 명시적으로 호출하는 거다.
+코드 한 줄이긴 하지만, 바깥에서 감싸는 것이기 때문에 **라이브러리가 공개한 훅과 인터페이스만큼만** 계측할 수 있다는 한계가 있다. Zero-code 에이전트가 내부적으로 하는 일도 결국 이 Instrumentation Library를 런타임에 자동 적용하는 것이다.
 
----
+### Native Instrumentation: 라이브러리 자체에 내장
 
-## 둘은 양자택일이 아니라 레이어다
+OTel이 궁극적으로 지향하는 방향은 **라이브러리 작성자가 직접 OTel API를 호출**하는 것이다:
 
-실무에서는 Zero-code와 Code-based를 **조합**한다:
+```python
+# HTTP 프레임워크 내부 코드 — API"만" 의존
+from opentelemetry import trace
+
+tracer = trace.get_tracer("my-http-framework", "2.0.0")
+
+class Router:
+    def handle_request(self, request):
+        with tracer.start_as_current_span(f"{request.method} {request.path}") as span:
+            span.set_attribute("http.method", request.method)
+            return self._dispatch(request)
+```
+
+라이브러리 작성자가 내부 동작을 가장 잘 알기 때문에, 외부 Wrapper보다 **더 정확하고 풍부한 텔레메트리**를 만들 수 있다.
+
+핵심 규칙: **API만 의존하고, 절대 SDK에 의존하지 않는다.** SDK가 없으면 모든 API 호출이 no-op이 되어 성능 영향이 제로다. 라이브러리 사용자가 SDK를 설정할지 말지 **선택**하게 두는 것이다.
+
+OTel 프로젝트의 공식 입장도 명확하다: "장기적으로는 Native Instrumentation이 표준이 되길 바라고, Instrumentation Library는 그 갭을 메우는 과도기적 해법이다."
+
+### 세 계층을 한 그림으로
 
 ```mermaid
 flowchart TB
-    subgraph layer1["Layer 1: Zero-Code"]
-        direction LR
-        Z1["HTTP Span"] ~~~ Z2["DB Span"] ~~~ Z3["gRPC Span"]
+    subgraph layer1["Layer 1: Zero-Code Agent"]
+        Z["에이전트가 런타임에 자동 주입\n코드 변경 제로"]
     end
 
-    subgraph layer2["Layer 2: Code-Based"]
-        direction LR
-        C1["비즈니스 Span\nprocess-order"] ~~~ C2["커스텀 Attribute\norder.id, user.id"] ~~~ C3["도메인 Event\npayment-validated"]
+    subgraph layer2["Layer 2: Instrumentation Library"]
+        IL["외부 패키지가 훅/콜백으로 감싸기\n코드 한 줄"]
     end
 
-    layer1 -->|"인프라 가시성 확보"| layer2
-    layer2 -->|"비즈니스 맥락 추가"| FULL["완전한 Observability"]
+    subgraph layer3["Layer 3: Native + Code-Based"]
+        N["라이브러리가 API 직접 호출\n+ 앱에서 비즈니스 Span 추가"]
+    end
+
+    layer1 -->|"같은 원리,\n자동 적용"| layer2
+    layer2 -->|"더 정밀한\n계측 가능"| layer3
 
     style layer1 fill:#e8f5e9,stroke:#4caf50
     style layer2 fill:#e3f2fd,stroke:#2196f3
-    style FULL fill:#fff3e0,stroke:#ff9800
+    style layer3 fill:#fff3e0,stroke:#ff9800
 ```
 
-| 단계 | 접근 | 얻는 것 |
-|------|------|---------|
-| **1단계** | Zero-code로 시작 | 코드 변경 없이 인프라 레벨 Span 확보 |
-| **2단계** | Code-based로 보강 | 비즈니스 Span, 도메인 Attribute, 커스텀 이벤트 추가 |
-
-Zero-code로 **숲**을 보고, Code-based로 **나무**를 본다.
+아래로 갈수록 **정밀도와 맥락이 풍부**해지고, 위로 갈수록 **코드 변경이 적다**. 실무에서는 세 계층을 조합한다: Zero-code로 인프라 가시성을 확보하고, Instrumentation Library로 프레임워크 계측을 보강하고, Native/Code-based로 비즈니스 맥락을 심는다.
 
 ---
 
