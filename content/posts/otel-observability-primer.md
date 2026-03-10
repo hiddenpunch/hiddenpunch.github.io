@@ -1,6 +1,6 @@
 ---
 title: "OpenTelemetry 해체분석기 #1: Observability란 무엇인가"
-date: 2026-03-11T10:00:00+09:00
+date: 2026-03-10T23:00:00+09:00
 summary: "모니터링과 Observability는 다르다. 왜 로그만으로는 부족한지, 3대 신호가 어떻게 연결되는지, OTel 이전에 알아야 할 개념을 정리한다."
 tags: ["opentelemetry", "observability", "해체분석기", "tracing", "metrics", "logging"]
 categories: ["Observability"]
