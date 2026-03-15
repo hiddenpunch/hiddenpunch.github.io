@@ -1,5 +1,5 @@
 ---
-title: "[Tech Digest] How Advanced Browsing Protection Works in Messenger"
+title: "[Tech Digest] E2E 암호화 메신저에서 악성 링크를 탐지하는 법"
 date: 2026-03-15T09:19:00+09:00
 summary: "E2E 암호화를 유지하면서 악성 링크를 탐지하는 Meta의 5가지 암호학적 프리미티브 조합"
 tags: ["tech-digest", "meta"]

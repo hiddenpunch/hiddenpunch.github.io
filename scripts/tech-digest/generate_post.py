@@ -36,6 +36,7 @@ tags: ["tech-digest", "{args.tag}"]
 categories: ["Tech Digest"]
 series: ["Tech Digest"]
 draft: false
+mermaid: true
 ---
 
 > 원문: [{args.source}]({args.url})

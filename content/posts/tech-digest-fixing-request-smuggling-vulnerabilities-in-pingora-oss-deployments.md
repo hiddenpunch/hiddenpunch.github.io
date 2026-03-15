@@ -1,5 +1,5 @@
 ---
-title: "[Tech Digest] Fixing Request Smuggling Vulnerabilities in Pingora OSS Deployments"
+title: "[Tech Digest] Pingora OSS의 HTTP 스머글링 취약점 분석과 수정"
 date: 2026-03-15T09:19:00+09:00
 summary: "Pingora 프록시의 HTTP 스머글링 취약점 3가지와 그 수정 과정을 기술적으로 분석합니다"
 tags: ["tech-digest", "cloudflare"]

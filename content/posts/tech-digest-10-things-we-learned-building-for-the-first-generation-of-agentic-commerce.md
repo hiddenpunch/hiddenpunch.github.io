@@ -1,5 +1,5 @@
 ---
-title: "[Tech Digest] 10 Things We Learned Building for the First Generation of Agentic Commerce"
+title: "[Tech Digest] Agentic Commerce 시대, Stripe가 배운 10가지 교훈"
 date: 2026-03-15T09:19:00+09:00
 summary: "AI 에이전트가 쇼핑을 대행하는 시대, Stripe가 6개월간의 운영에서 얻은 10가지 실전 교훈"
 tags: ["tech-digest", "stripe"]

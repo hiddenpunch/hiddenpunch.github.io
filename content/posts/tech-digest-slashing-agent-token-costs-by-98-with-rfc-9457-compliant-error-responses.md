@@ -1,5 +1,5 @@
 ---
-title: "[Tech Digest] Slashing Agent Token Costs by 98% with RFC 9457-Compliant Error Responses"
+title: "[Tech Digest] RFC 9457로 AI 에이전트 토큰 비용 98% 절감하기"
 date: 2026-03-15T09:19:00+09:00
 summary: "AI 에이전트에게 HTML 에러 페이지 대신 구조화된 응답을 주면 토큰 비용이 98% 줄어듭니다"
 tags: ["tech-digest", "cloudflare"]

@@ -1,5 +1,5 @@
 ---
-title: "[Tech Digest] Continuous AI for Accessibility: How GitHub Transforms Feedback into Inclusion"
+title: "[Tech Digest] GitHub이 AI로 접근성 피드백을 체계적 개선으로 바꾸는 방법"
 date: 2026-03-15T09:19:00+09:00
 summary: "GitHub이 Copilot과 Actions를 활용해 접근성 피드백을 체계적 개선 파이프라인으로 전환한 방법"
 tags: ["tech-digest", "github"]
