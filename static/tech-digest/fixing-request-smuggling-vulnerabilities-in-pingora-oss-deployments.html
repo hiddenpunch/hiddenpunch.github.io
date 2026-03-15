@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pingora OSS HTTP 스머글링 취약점 분석</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #13131a;
+            --surface2: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-dim: #8888a0;
+            --accent: #6c5ce7;
+            --accent2: #00cec9;
+            --accent3: #fd79a8;
+            --accent4: #fdcb6e;
+            --accent5: #55efc4;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #15151d 100%);
+            color: var(--text);
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 0%, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 206, 201, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(253, 121, 168, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 8vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            color: var(--text-dim);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Section Divider */
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+            margin: 4rem 0;
+            max-width: 60px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            width: 80px;
+            margin-top: 0.5rem;
+        }
+
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* Section 1: Concept */
+        .concept-section {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+
+        /* Section 2: Card Grid */
+        .vulnerability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .vuln-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vuln-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .vuln-card:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--accent2), transparent);
+        }
+
+        .vuln-card:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--accent3), transparent);
+        }
+
+        .vuln-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .cve-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: var(--bg);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .vuln-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .vuln-card h3::after {
+            display: none;
+        }
+
+        .vuln-card p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* Section 3: Flowchart */
+        .flowchart {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 2rem;
+            overflow-x: auto;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            min-width: 100%;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .step-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 50%;
+            font-weight: 700;
+            color: var(--bg);
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--surface2);
+            border-left: 2px solid var(--accent);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--accent2);
+            font-size: 1.5rem;
+            margin: -0.5rem 0;
+        }
+
+        /* Section 4: Before/After */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .comparison-card.vulnerable {
+            border-color: var(--accent3);
+            background: linear-gradient(135deg, rgba(253, 121, 168, 0.05) 0%, rgba(253, 121, 168, 0.02) 100%);
+        }
+
+        .comparison-card.secure {
+            border-color: var(--accent5);
+            background: linear-gradient(135deg, rgba(85, 239, 196, 0.05) 0%, rgba(85, 239, 196, 0.02) 100%);
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-card.vulnerable .comparison-title {
+            color: var(--accent3);
+        }
+
+        .comparison-card.secure .comparison-title {
+            color: var(--accent5);
+        }
+
+        .comparison-list {
+            list-style: none;
+        }
+
+        .comparison-list li {
+            padding: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        .comparison-card.vulnerable .comparison-list li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: var(--accent3);
+            font-weight: 700;
+        }
+
+        .comparison-card.secure .comparison-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent5);
+            font-weight: 700;
+        }
+
+        /* Section 5: Timeline */
+        .timeline {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+        }
+
+        .timeline-items {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(even) {
+            direction: rtl;
+        }
+
+        .timeline-item:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .timeline-date {
+            text-align: right;
+            padding-right: 2rem;
+        }
+
+        .timeline-item:nth-child(even) .timeline-date {
+            text-align: left;
+            padding-right: 0;
+            padding-left: 2rem;
+        }
+
+        .timeline-date-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .timeline-date-label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .timeline-content {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            position: relative;
+        }
+
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::after {
+            right: -24px;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            left: -24px;
+        }
+
+        .timeline-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                padding: 2rem;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .timeline-item:nth-child(even) {
+                direction: ltr;
+            }
+
+            .timeline-date {
+                text-align: left;
+                padding-right: 0;
+                padding-left: 2rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .timeline-item:nth-child(even) .timeline-date {
+                padding-left: 2rem;
+            }
+
+            .timeline-content::after {
+                left: -24px !important;
+                right: auto !important;
+            }
+        }
+
+        /* Insight Box */
+        .insight-box {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1) 0%, rgba(0, 206, 201, 0.1) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-box::before {
+            content: '💡';
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.1;
+            top: -1rem;
+            right: -1rem;
+            pointer-events: none;
+        }
+
+        .insight-box h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 1rem;
+        }
+
+        .insight-box p {
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Summary Section */
+        .summary-box {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .summary-box p {
+            font-size: 1.05rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent2);
+            text-decoration: underline;
+        }
+
+        /* Code/Tech Terms */
+        code, .tech-term {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--surface2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--accent4);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 2rem;
+            }
+
+            .hero {
+                padding: 5rem 2rem 4rem;
+            }
+
+            h2::after {
+                width: 60px;
+            }
+
+            .concept-section,
+            .flowchart,
+            .timeline,
+            .summary-box {
+                padding: 2rem;
+            }
+
+            .vuln-card,
+            .comparison-card {
+                padding: 1.5rem;
+            }
+
+            .flow-steps {
+                gap: 1rem;
+            }
+
+            .step-content {
+                padding: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Pingora OSS의 HTTP 스머글링 취약점 분석</h1>
+            <p class="subtitle">CVE-2026-2833, CVE-2026-2835, CVE-2026-2836 — 프록시와 백엔드 사이의 해석 불일치를 악용하는 공격</p>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Section 1: Concept -->
+    <section>
+        <div class="container">
+            <h2>HTTP Request Smuggling이란?</h2>
+            <div class="concept-section">
+                <p>
+                    HTTP Request Smuggling은 프록시와 백엔드 서버가 HTTP 요청의 경계를 다르게 해석할 때 발생하는 심각한 보안 취약점입니다. 이러한 해석 불일치를 악용하면 공격자는 하나의 요청 안에 두 번째 요청을 숨길 수 있습니다.
+                </p>
+                <p>
+                    스머글링 공격의 결과는 치명적입니다. 공격자는 보안 제어를 우회하고, 사용자의 세션을 탈취하고, 캐시를 오염시킬 수 있습니다. 예를 들어 인증이 필요한 관리자 페이지에 접근하거나, 다른 사용자의 민감한 정보를 열람할 수도 있습니다.
+                </p>
+                <p>
+                    Pingora OSS 배포에서 발견된 세 가지 취약점은 HTTP/1.1 프로토콜 사양(RFC 9112)의 미묘한 위반으로 인해 발생했으며, 프록시 구현의 정확성이 얼마나 중요한지를 보여줍니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 2: Vulnerabilities Grid -->
+    <section>
+        <div class="container">
+            <h2>3가지 취약점</h2>
+            <div class="vulnerability-grid">
+                <div class="vuln-card">
+                    <span class="cve-badge">CVE-2026-2833</span>
+                    <h3>Upgrade 헤더 오처리</h3>
+                    <p>
+                        Pingora가 <code>101 Switching Protocols</code> 응답을 기다리지 않고 단순히 <code>Upgrade</code> 헤더의 존재만으로 passthrough 모드로 진입합니다. 공격자가 두 번째 HTTP 요청을 파이프라이닝하면 이를 업그레이드된 스트림의 일부로 처리하여 보안 제어를 우회할 수 있습니다.
+                    </p>
+                </div>
+
+                <div class="vuln-card">
+                    <span class="cve-badge">CVE-2026-2835</span>
+                    <h3>Transfer-Encoding 파싱 결함</h3>
+                    <p>
+                        HTTP/1.0 요청에 <code>Transfer-Encoding</code> 헤더를 허용하고, chunked 인코딩 검증이 미흡하며, close-delimited body를 허용하는 등 RFC 9112를 위반합니다. 이로 인해 프록시와 백엔드의 요청 경계 해석이 불일치하여 스머글링이 가능해집니다.
+                    </p>
+                </div>
+
+                <div class="vuln-card">
+                    <span class="cve-badge">CVE-2026-2836</span>
+                    <h3>캐시 키 구성 문제</h3>
+                    <p>
+                        기본 캐시 키가 URI 경로만 사용하고 호스트 헤더와 스킴을 무시합니다. 결과적으로 서로 다른 호스트의 응답이 같은 캐시 엔트리를 덮어쓸 수 있어 캐시 오염 및 정보 유출이 발생합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 3: Attack Flow -->
+    <section>
+        <div class="container">
+            <h2>CVE-2026-2833 공격 흐름</h2>
+            <div class="flowchart">
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <p><strong>공격자가 악의적인 요청 전송</strong></p>
+                            <p>공격자가 <code>Upgrade: foo</code> 헤더와 함께 GET 요청을 전송합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">⬇️</div>
+                    <div class="flow-step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <p><strong>Pingora가 Passthrough 모드로 진입</strong></p>
+                            <p>Pingora는 <code>101 Switching Protocols</code> 응답을 기다리지 않고 즉시 passthrough 모드로 전환됩니다.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">⬇️</div>
+                    <div class="flow-step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <p><strong>공격자가 요청을 파이프라이닝</strong></p>
+                            <p>공격자가 같은 연결을 통해 두 번째 GET <code>/admin</code> 요청을 파이프라이닝합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">⬇️</div>
+                    <div class="flow-step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <p><strong>Pingora가 잘못 전달</strong></p>
+                            <p>Pingora는 두 번째 요청을 업그레이드된 스트림의 일부로 백엔드에 전달합니다.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">⬇️</div>
+                    <div class="flow-step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <p><strong>보안 우회 성공</strong></p>
+                            <p>백엔드가 <code>/admin</code>에 대한 응답을 반환하고, 공격자는 인증 없이 관리자 리소스에 접근합니다. 🚨</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 4: Before/After -->
+    <section>
+        <div class="container">
+            <h2>수정 전 vs 수정 후</h2>
+            <div class="comparison">
+                <div class="comparison-card vulnerable">
+                    <div class="comparison-title">🔴 수정 전 (취약함)</div>
+                    <ul class="comparison-list">
+                        <li><code>Upgrade</code> 헤더만으로 passthrough 모드 진입</li>
+                        <li><code>HTTP/1.0</code> + <code>Transfer-Encoding</code> 허용</li>
+                        <li>close-delimited 요청 body 허용</li>
+                        <li>캐시 키에 호스트 헤더 미포함</li>
+                        <li>스킴(http/https) 무시</li>
+                        <li>요청 경계 해석 불일치</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card secure">
+                    <div class="comparison-title">🟢 수정 후 (안전함 — Pingora 0.8.0)</div>
+                    <ul class="comparison-list">
+                        <li><code>101 Switching Protocols</code> 수신 후에만 모드 전환</li>
+                        <li><code>HTTP/1.0</code> + <code>Transfer-Encoding</code> 거부</li>
+                        <li>close-delimited 요청 body 거부</li>
+                        <li>기본 캐시 키 구현 제거</li>
+                        <li>호스트 및 스킴 고려</li>
+                        <li>RFC 9112 엄격 준수</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 5: Timeline -->
+    <section>
+        <div class="container">
+            <h2>공개 타임라인</h2>
+            <div class="timeline">
+                <div class="timeline-items">
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2025-12-02</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>Upgrade 기반 스머글링 취약점 최초 보고</strong></p>
+                            <p>연구자가 CVE-2026-2833을 Cloudflare에 신고합니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2026-01-13</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>Transfer-Encoding 파싱 결함 발견</strong></p>
+                            <p>CVE-2026-2835 발견 및 보고 — HTTP/1.0과 Transfer-Encoding의 조합 문제.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2026-01-18</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>캐시 키 구성 문제 발견</strong></p>
+                            <p>CVE-2026-2836 발견 및 보고 — 호스트와 스킴을 무시하는 기본 캐시 키.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2026-01-29~02-13</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>수정 개발 및 검증</strong></p>
+                            <p>연구자와 Cloudflare 엔지니어가 협력하여 수정 사항을 개발하고 검증합니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2026-03-02</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>Pingora 0.8.0 릴리즈</strong></p>
+                            <p>모든 취약점에 대한 수정 사항을 포함한 Pingora 0.8.0이 공개됩니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="timeline-date-value">2026-03-04</div>
+                        </div>
+                        <div class="timeline-content">
+                            <p><strong>CVE 공개</strong></p>
+                            <p>세 개의 CVE가 공식 공개되고 기술 세부 사항이 공유됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Insight Box -->
+    <section>
+        <div class="container">
+            <div class="insight-box">
+                <h4>💡 중요한 인사이트: Cloudflare CDN 고객은 안전합니다</h4>
+                <p>
+                    <strong>Cloudflare CDN</strong>을 사용하는 고객은 영향을 받지 않습니다. Cloudflare의 CDN은 다운스트림에서 HTTP/1.1만을 지원하고 엄격한 프레이밍 검증을 수행하기 때문입니다. 그러나 <strong>Pingora를 독립적으로 배포</strong>하는 경우, 즉시 0.8.0으로 업그레이드해야 합니다. 자신의 인프라에서 Pingora를 역프록시로 사용 중이라면 최우선으로 패치를 적용하세요.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section>
+        <div class="container">
+            <div class="summary-box">
+                <h2 style="text-align: center;">핵심 요약</h2>
+                <p>
+                    HTTP Request Smuggling은 프록시 구현의 미묘한 차이에서 발생합니다. Pingora의 세 가지 취약점은 HTTP/1.1 스펙의 엄격한 준수 부족에서 비롯되었습니다. Pingora 0.8.0은 RFC 9112 사양을 엄격히 준수하여 이러한 문제를 완전히 해결했습니다. 안전한 배포를 위해서는 최신 버전으로의 즉각적인 업그레이드가 필수적입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>이 페이지는 Cloudflare 블로그 포스트를 기반으로 한 기술 설명 자료입니다.</p>
+            <p>
+                원문 링크:
+                <a href="https://blog.cloudflare.com/pingora-oss-smuggling-vulnerabilities/" target="_blank">
+                    Fixing request smuggling vulnerabilities in Pingora OSS deployments
+                </a>
+            </p>
+            <p style="margin-top: 2rem; font-size: 0.85rem; color: var(--text-dim);">
+                © 2026 보안 정보 기술 교육 자료. 모든 내용은 공개 정보를 기반으로 합니다.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

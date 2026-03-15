@@ -1,0 +1,52 @@
+[
+  {
+    "title": "10 things we learned building for the first generation of agentic commerce",
+    "url": "https://stripe.com/blog/10-lessons",
+    "source": "Stripe Blog",
+    "tag": "stripe",
+    "slug": "10-things-we-learned-building-for-the-first-generation-of-agentic-commerce",
+    "published": "2026-03-12T00:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:18.329009+00:00",
+    "processed_at": "2026-03-15T00:17:40.321183+00:00"
+  },
+  {
+    "title": "How Advanced Browsing Protection Works in Messenger",
+    "url": "https://engineering.fb.com/2026/03/09/security/how-advanced-browsing-protection-works-in-messenger/",
+    "source": "Meta Engineering",
+    "tag": "meta",
+    "slug": "how-advanced-browsing-protection-works-in-messenger",
+    "published": "2026-03-09T16:00:36+00:00",
+    "queued_at": "2026-03-15T00:11:18.975425+00:00",
+    "processed_at": "2026-03-15T00:17:40.321261+00:00"
+  },
+  {
+    "title": "Slashing agent token costs by 98% with RFC 9457-compliant error responses",
+    "url": "https://blog.cloudflare.com/rfc-9457-agent-error-pages/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "slashing-agent-token-costs-by-98-with-rfc-9457-compliant-error-responses",
+    "published": "2026-03-11T13:05:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262028+00:00",
+    "processed_at": "2026-03-15T00:17:40.321266+00:00"
+  },
+  {
+    "title": "Fixing request smuggling vulnerabilities in Pingora OSS deployments",
+    "url": "https://blog.cloudflare.com/pingora-oss-smuggling-vulnerabilities/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "fixing-request-smuggling-vulnerabilities-in-pingora-oss-deployments",
+    "published": "2026-03-09T14:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262166+00:00",
+    "processed_at": "2026-03-15T00:17:40.321280+00:00"
+  },
+  {
+    "title": "Continuous AI for accessibility: How GitHub transforms feedback into inclusion",
+    "url": "https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/",
+    "source": "GitHub Blog Engineering",
+    "tag": "github",
+    "slug": "continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion",
+    "published": "2026-03-12T16:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.819312+00:00",
+    "processed_at": "2026-03-15T00:17:40.321287+00:00"
+  }
+]

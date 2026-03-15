@@ -1,0 +1,191 @@
+[
+  {
+    "title": "Recommending Travel Destinations to Help Users Explore",
+    "url": "https://medium.com/airbnb-engineering/recommending-travel-destinations-to-help-users-explore-5fa7a81654fb?source=rss----53c7c27702d5---4",
+    "source": "Airbnb Tech",
+    "tag": "airbnb",
+    "slug": "recommending-travel-destinations-to-help-users-explore",
+    "published": "2026-03-12T18:55:19+00:00",
+    "queued_at": "2026-03-15T00:11:17.983992+00:00"
+  },
+  {
+    "title": "Analyzing first-party fraud trends: Account, free trial, and refund abuse",
+    "url": "https://stripe.com/blog/analyzing-first-party-fraud-trends-account-free-trial-and-refund-abuse",
+    "source": "Stripe Blog",
+    "tag": "stripe",
+    "slug": "analyzing-first-party-fraud-trends-account-free-trial-and-refund-abuse",
+    "published": "2026-03-10T00:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:18.329027+00:00"
+  },
+  {
+    "title": "Patch Me If You Can: AI Codemods for Secure-by-Default Android Apps",
+    "url": "https://engineering.fb.com/2026/03/13/android/ai-codemods-secure-by-default-android-apps-meta-tech-podcast/",
+    "source": "Meta Engineering",
+    "tag": "meta",
+    "slug": "patch-me-if-you-can-ai-codemods-for-secure-by-default-android-apps",
+    "published": "2026-03-13T16:00:26+00:00",
+    "queued_at": "2026-03-15T00:11:18.975415+00:00"
+  },
+  {
+    "title": "From legacy architecture to Cloudflare One",
+    "url": "https://blog.cloudflare.com/legacy-to-agile-sase/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "from-legacy-architecture-to-cloudflare-one",
+    "published": "2026-03-13T05:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262010+00:00"
+  },
+  {
+    "title": "Announcing Cloudflare Account Abuse Protection: prevent fraudulent attacks from bots and humans",
+    "url": "https://blog.cloudflare.com/account-abuse-protection/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "announcing-cloudflare-account-abuse-protection-prevent-fraudulent-attacks-from-b",
+    "published": "2026-03-12T05:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262021+00:00"
+  },
+  {
+    "title": "AI Security for Apps is now generally available",
+    "url": "https://blog.cloudflare.com/ai-security-for-apps-ga/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "ai-security-for-apps-is-now-generally-available",
+    "published": "2026-03-11T13:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262033+00:00"
+  },
+  {
+    "title": "Investigating multi-vector attacks in Log Explorer",
+    "url": "https://blog.cloudflare.com/investigating-multi-vector-attacks-in-log-explorer/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "investigating-multi-vector-attacks-in-log-explorer",
+    "published": "2026-03-10T13:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262099+00:00"
+  },
+  {
+    "title": "Building a security overview dashboard for actionable insights",
+    "url": "https://blog.cloudflare.com/security-overview-dashboard/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "building-a-security-overview-dashboard-for-actionable-insights",
+    "published": "2026-03-10T13:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262134+00:00"
+  },
+  {
+    "title": "Translating risk insights into actionable protection: leveling up security posture with Cloudflare and Mastercard",
+    "url": "https://blog.cloudflare.com/attack-surface-intelligence/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "translating-risk-insights-into-actionable-protection-leveling-up-security-postur",
+    "published": "2026-03-10T05:05:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262153+00:00"
+  },
+  {
+    "title": "Active defense: introducing a stateful vulnerability scanner for APIs",
+    "url": "https://blog.cloudflare.com/vulnerability-scanner/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "active-defense-introducing-a-stateful-vulnerability-scanner-for-apis",
+    "published": "2026-03-09T14:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262178+00:00"
+  },
+  {
+    "title": "Complexity is a choice. SASE migrations shouldn’t take years.",
+    "url": "https://blog.cloudflare.com/complexity-is-a-choice-sase-migrations-shouldnt-take-years/",
+    "source": "Cloudflare Blog",
+    "tag": "cloudflare",
+    "slug": "complexity-is-a-choice-sase-migrations-shouldnt-take-years",
+    "published": "2026-03-09T06:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.262208+00:00"
+  },
+  {
+    "title": "Serverless Workspaces in Azure Databricks is now Generally Available",
+    "url": "https://www.databricks.com/blog/serverless-workspaces-azure-databricks-now-generally-available",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "serverless-workspaces-in-azure-databricks-is-now-generally-available",
+    "published": "2026-03-13T20:30:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906468+00:00"
+  },
+  {
+    "title": "AI Governance Is the Strategy: Why Successful AI Initiatives Begins with Control, Not Code",
+    "url": "https://www.databricks.com/blog/ai-governance-strategy-why-successful-ai-initiatives-begins-control-not-code",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "ai-governance-is-the-strategy-why-successful-ai-initiatives-begins-with-control",
+    "published": "2026-03-12T20:40:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906479+00:00"
+  },
+  {
+    "title": "The Evolution of Data Engineering: How Serverless Compute is Transforming Notebooks, Lakeflow Jobs, and Spark Declarative Pipelines",
+    "url": "https://www.databricks.com/blog/evolution-data-engineering-how-serverless-compute-transforming-notebooks-lakeflow-jobs",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "the-evolution-of-data-engineering-how-serverless-compute-is-transforming-noteboo",
+    "published": "2026-03-12T15:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906488+00:00"
+  },
+  {
+    "title": "10 Data Warehouse Migration Myths Blocking AI-readiness (and Your Blueprint for Seamless Modernization)",
+    "url": "https://www.databricks.com/blog/10-data-warehouse-migration-myths-blocking-ai-readiness-and-your-blueprint-seamless",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "10-data-warehouse-migration-myths-blocking-ai-readiness-and-your-blueprint-for-s",
+    "published": "2026-03-12T15:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906496+00:00"
+  },
+  {
+    "title": "How Ontologies Help Nuclear Scale to Meet Global Energy Demand",
+    "url": "https://www.databricks.com/blog/how-ontologies-help-nuclear-scale-meet-global-energy-demand",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "how-ontologies-help-nuclear-scale-to-meet-global-energy-demand",
+    "published": "2026-03-11T20:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906502+00:00"
+  },
+  {
+    "title": "Mitigating The Risk of Prompt Injection for AI Agents on Databricks",
+    "url": "https://www.databricks.com/blog/mitigating-risk-prompt-injection-ai-agents-databricks",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "mitigating-the-risk-of-prompt-injection-for-ai-agents-on-databricks",
+    "published": "2026-03-11T19:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906508+00:00"
+  },
+  {
+    "title": "Introducing Genie Code",
+    "url": "https://www.databricks.com/blog/introducing-genie-code",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "introducing-genie-code",
+    "published": "2026-03-11T17:55:27+00:00",
+    "queued_at": "2026-03-15T00:11:19.906513+00:00"
+  },
+  {
+    "title": "Your Databricks Guide to HIMSS26",
+    "url": "https://www.databricks.com/blog/your-databricks-guide-himss26",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "your-databricks-guide-to-himss26",
+    "published": "2026-03-11T15:40:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906517+00:00"
+  },
+  {
+    "title": "Databricks acquires Quotient AI to power AI agent evaluations",
+    "url": "https://www.databricks.com/blog/databricks-acquires-quotient-ai-power-ai-agent-evaluations",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "databricks-acquires-quotient-ai-to-power-ai-agent-evaluations",
+    "published": "2026-03-11T14:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906530+00:00"
+  },
+  {
+    "title": "Beyond Provisioning: The Developer’s Guide to Databricks Lakebase Autoscaling",
+    "url": "https://www.databricks.com/blog/beyond-provisioning-developers-guide-databricks-lakebase-autoscaling",
+    "source": "Databricks Blog",
+    "tag": "databricks",
+    "slug": "beyond-provisioning-the-developers-guide-to-databricks-lakebase-autoscaling",
+    "published": "2026-03-11T13:00:00+00:00",
+    "queued_at": "2026-03-15T00:11:19.906538+00:00"
+  }
+]
