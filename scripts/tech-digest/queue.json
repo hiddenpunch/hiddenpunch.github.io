@@ -1,14 +1,5 @@
 [
   {
-    "title": "Recommending Travel Destinations to Help Users Explore",
-    "url": "https://medium.com/airbnb-engineering/recommending-travel-destinations-to-help-users-explore-5fa7a81654fb?source=rss----53c7c27702d5---4",
-    "source": "Airbnb Tech",
-    "tag": "airbnb",
-    "slug": "recommending-travel-destinations-to-help-users-explore",
-    "published": "2026-03-12T18:55:19+00:00",
-    "queued_at": "2026-03-15T00:11:17.983992+00:00"
-  },
-  {
     "title": "Analyzing first-party fraud trends: Account, free trial, and refund abuse",
     "url": "https://stripe.com/blog/analyzing-first-party-fraud-trends-account-free-trial-and-refund-abuse",
     "source": "Stripe Blog",
@@ -16,15 +7,6 @@
     "slug": "analyzing-first-party-fraud-trends-account-free-trial-and-refund-abuse",
     "published": "2026-03-10T00:00:00+00:00",
     "queued_at": "2026-03-15T00:11:18.329027+00:00"
-  },
-  {
-    "title": "Patch Me If You Can: AI Codemods for Secure-by-Default Android Apps",
-    "url": "https://engineering.fb.com/2026/03/13/android/ai-codemods-secure-by-default-android-apps-meta-tech-podcast/",
-    "source": "Meta Engineering",
-    "tag": "meta",
-    "slug": "patch-me-if-you-can-ai-codemods-for-secure-by-default-android-apps",
-    "published": "2026-03-13T16:00:26+00:00",
-    "queued_at": "2026-03-15T00:11:18.975415+00:00"
   },
   {
     "title": "From legacy architecture to Cloudflare One",
